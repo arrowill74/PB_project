@@ -19,6 +19,8 @@ boolean downPressed = false;
 boolean leftPressed = false;
 boolean rightPressed = false;
 
+boolean success;
+
 
 /* Add Variable Rule
 when you want to add any variable, please 
