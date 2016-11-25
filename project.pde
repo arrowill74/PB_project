@@ -1,7 +1,7 @@
 //burger image
 PImage btmbread, middlebread, topbread, cheese, lettuce, meat,  tomato;
 //french fries
-PImage fewFrenchfries, halfFrenchfries, fullFrenchfries, bug, frenchfry, burnedFrenchfry;
+PImage emptyFrenchfries, fewFrenchfries, halfFrenchfries, fullFrenchfries, bug, frenchfry, burnedFrenchfry;
 //ice cream
 PImage cone, blurberry, choco, mango, matcha, strawberry, vanilla;
 //drink
@@ -19,7 +19,7 @@ boolean downPressed = false;
 boolean leftPressed = false;
 boolean rightPressed = false;
 
-boolean success;
+boolean moodChange;
 
 
 /* Add Variable Rule
@@ -49,6 +49,7 @@ void setup () {
   tomato = loadImage("img/burger/tomato.png");
   
   //french fries
+  emptyFrenchfries = loadImage("img/french fries/empty_frenchfries.png");
   fewFrenchfries = loadImage("img/french fries/few_frenchfries.png");
   halfFrenchfries = loadImage("img/french fries/half_frenchfries.png");
   fullFrenchfries = loadImage("img/french fries/full_frenchfries.png");
