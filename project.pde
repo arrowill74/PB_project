@@ -1,11 +1,18 @@
 //burger image
-PImage btmbread, middlebread, topbread, cheese, lettuce, meat,  tomato;
+PImage btmbread, middlebread, topbread, 
+        cheese, lettuce, meat,  tomato,
+        conveyor, conveyorGlass;
 //french fries
-PImage emptyFrenchfries, fewFrenchfries, halfFrenchfries, fullFrenchfries, bug, frenchfry, burnedFrenchfry;
+PImage emptyFrenchfries, fewFrenchfries, halfFrenchfries, fullFrenchfries, 
+        bug, frenchfry, burnedFrenchfry;
+        
 //ice cream
 PImage cone, blurberry, choco, mango, matcha, strawberry, vanilla;
+
 //drink
-PImage glass;
+PImage glass, drinkMachineUp, drinkMachineDown;
+
+PImage clock;
 
 final int BURGER = 0;
 final int FRENCH_FRIES = 1;
@@ -47,6 +54,9 @@ void setup () {
   lettuce = loadImage("img/burger/lettuce.png");
   meat = loadImage("img/burger/meat.png");
   tomato = loadImage("img/burger/tomato.png");
+  conveyor = loadImage("img/burger/conveyor.png");
+  conveyorGlass = loadImage("img/burger/conveyor_glass.png");
+  
   
   //french fries
   emptyFrenchfries = loadImage("img/french fries/empty_frenchfries.png");
@@ -57,7 +67,7 @@ void setup () {
   frenchfry = loadImage("img/french fries/frenchfry.png");
   burnedFrenchfry = loadImage("img/french fries/frenchfry(burned).png");
   
-  //ice cream cone, blurberry, choco, mango, matcha, strawberry, vanilla;
+  //ice cream
   cone = loadImage("img/ice cream/cone.png");
   blurberry = loadImage("img/ice cream/blurberry.png");
   choco = loadImage("img/ice cream/choco.png");
@@ -66,7 +76,12 @@ void setup () {
   strawberry = loadImage("img/ice cream/strawberry.png");
   vanilla = loadImage("img/ice cream/vanilla.png");
   
-  glass = loadImage("img/glass.png");
+  //drink
+  glass = loadImage("img/drink/glass.png");
+  drinkMachineUp = loadImage("img/drink/drink machine_up.png");
+  drinkMachineDown = loadImage("img/drink/drink machine_down.png");
+  
+  clock = loadImage("img/clock.png");
   
 }
 
@@ -92,6 +107,14 @@ void draw() {
         break; 
   }
         
+}
+
+boolean isHit(int ax, int ay, int aw, int ah, int bx, int by, int bw, int bh){
+  if(ax >= bx-aw && ax <= bx+bw && ay >= by-ah && ay <= by+bh){
+    return true;
+  }else{
+    return false;
+  }
 }
 
 void keyPressed() {
