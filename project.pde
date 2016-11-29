@@ -94,14 +94,6 @@ void draw() {
         
 }
 
-boolean isHit(int ax, int ay, int aw, int ah, int bx, int by, int bw, int bh){
-  if(ax >= bx-aw && ax <= bx+bw && ay >= by-ah && ay <= by+bh){
-    return true;
-  }else{
-    return false;
-  }
-}
-
 void keyPressed() {
   if (key == CODED) {
     switch (keyCode) {
