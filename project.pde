@@ -1,3 +1,10 @@
+//background
+PImage startBg, peopleBg, tableBg;
+
+Person fTA, mTA, teacher, customer;
+
+Food[] foods = new Food[7];
+
 //burger image
 PImage btmbread, middlebread, topbread, 
         cheese, lettuce, meat,  tomato,
@@ -14,6 +21,16 @@ PImage glass, drinkMachineUp, drinkMachineDown;
 
 PImage clock;
 
+//game state
+final int START = 0;
+final int PEOPLE = 1;
+final int TABLE = 2;
+final int RUN = 3;
+final int OVER = 4;
+final int WIN = 5;
+int gameState;
+
+//food state
 final int BURGER = 0;
 final int FRENCH_FRIES = 1;
 final int ICE_CREAM = 2;
@@ -26,26 +43,20 @@ boolean downPressed = false;
 boolean leftPressed = false;
 boolean rightPressed = false;
 
+//mood
 boolean moodChange;
-
-
-/* Add Variable Rule
-when you want to add any variable, please 
-1. write your name 
-2. use the comment behind your variable
-
-for example:
-//add by Yuzen (put your name)
-int[] burgerQueue = new burgerSeries;  //the order of the material in burger
-boolean burgerFallen;  //if the material is fallen on the the interal of burger or not
-
-*/
+int moodScore;
 
 void setup () {
   size(700, 700);
   foodState = 0; //change the value when you want to test different food
   
   //load image
+  //background
+  startBg = loadImage("img/background/startBg.png");
+  peopleBg = loadImage("img/background/peopleBg.png");
+  tableBg = loadImage("img/background/tableBg.png");
+
   //burger
   btmbread = loadImage("img/burger/btmbread.png");
   middlebread = loadImage("img/burger/middlebread.png");
@@ -83,10 +94,38 @@ void setup () {
   
   clock = loadImage("img/clock.png");
   
+  initGame();
 }
 
 void draw() {
-  switch (foodState) { 
+  switch (gameState){
+    case START:
+    
+      image(startBg, 0 , 0, 700, 700);
+    
+    break;
+
+    case PEOPLE :
+      image(peopleBg, 0, 0, 700, 700);
+      
+      fTA.fullDisplay(40, 150);
+      
+      mTA.fullDisplay(260, 150);
+
+      teacher.fullDisplay(480, 150);
+      
+    break;  
+    
+    case TABLE:
+      image(tableBg, 0, 0, 700, 700);
+      customer.halfDisplay();
+      moodScore = 5;
+    
+    
+    break;
+
+    case RUN:
+      switch (foodState) { 
         case BURGER:
           
         break;
@@ -105,7 +144,21 @@ void draw() {
         case DRINK:
           
         break; 
+    }
+    break;
+
+    case OVER :
+      
+    break;
+
+    case WIN :
+      
+    break;  
+
   }
+
+
+  
         
 }
 
@@ -115,6 +168,26 @@ boolean isHit(int ax, int ay, int aw, int ah, int bx, int by, int bw, int bh){
   }else{
     return false;
   }
+}
+
+void initGame(){
+  gameState = START;
+  for(int i = 0; i < 7; i++){
+    foods[i] = null;
+  }
+  
+  fTA = new Person("fTA");
+  fTA.setOrder(new int[]{BURGER, DRINK});
+  
+  mTA = new Person("mTA");
+  fTA.setOrder(new int[]{BURGER, FRENCH_FRIES, DRINK});
+  
+
+  teacher = new Person("teacher");
+  teacher.setOrder(new int[]{BURGER, FRENCH_FRIES, ICE_CREAM, DRINK, BURGER, FRENCH_FRIES, DRINK});
+  
+  
+  customer = new Person();
 }
 
 void keyPressed() {
@@ -137,6 +210,11 @@ void keyPressed() {
 }
 
 void keyReleased() {
+  if ( keyCode == ' '){
+    if (gameState == START){
+      gameState = PEOPLE;
+    }
+  }
   if (key == CODED) {
     switch (keyCode) {
     case UP:
