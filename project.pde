@@ -1,36 +1,109 @@
-//background
-PImage startBg, peopleBg, tableBg;
-
-Person fTA, mTA, teacher, customer;
-
-Food[] foods = new Food[7];
-
 //burger image
-PImage btmbread, middlebread, topbread, 
-        cheese, lettuce, meat,  tomato,
-        conveyor, conveyorGlass;
+PImage btmbread, middlebread, topbread, cheese, lettuce, meat, tomato;
 //french fries
-PImage emptyFrenchfries, fewFrenchfries, halfFrenchfries, fullFrenchfries, 
-        bug, frenchfry, burnedFrenchfry;
-        
+PImage emptyFrenchfries, fewFrenchfries, halfFrenchfries, fullFrenchfries, bug, frenchfry, burnedFrenchfry;
 //ice cream
-PImage cone, blurberry, choco, mango, matcha, strawberry, vanilla;
-
+PImage cone, blueberry, choco, mango, matcha, strawberry, vanilla, empty, icecream, frost, scoop, scoop_b, scoop_c, scoop_m, scoop_matcha, scoop_s, scoop_v ;
 //drink
-PImage glass, drinkMachineUp, drinkMachineDown;
-
+PImage glass;
+//clock
 PImage clock;
+PFont second;
+int timeCount;
+/*--------------french fries--------------*/
+// french fries 
+final int frenchfries_W = 130, frenchfries_H = 160;
+float frenchfries_X = width/2 - frenchfries_W/2, frenchfries_Y = 450; //薯條包
+// bug 
+final int bug_W = 40, bug_H = 50, bug_MIN_X = bug_W/2, bug_MAX_X = 700 - bug_W;  //蟑螂
+float bug_X, bug_Y, bugSpeed;
+// frenchfry1 & frenchfry2 
+final int frenchfry_W = 40, frenchfry_H = 100, frenchfry_MIN_X = frenchfry_W/2, frenchfry_MAX_X = 700 - frenchfry_W;
+//正常薯條
+float frenchfry1_X, frenchfry1_Y, frenchfry1Speed;
+float frenchfry2_X, frenchfry2_Y, frenchfry2Speed;
+// burnedFrenchfry 
+final int burnedFrenchfry_W = 40, burnedFrenchfry_H = 100, burnedFrenchfry_MIN_X = burnedFrenchfry_W/2, burnedFrenchfry_MAX_X = 700 - burnedFrenchfry_W; 
+float burnedFrenchfry_X, burnedFrenchfry_Y, burnedFrenchfrySpeed;
+// frenchfries count
+int numFrenchfries;
+/*--------------french fries--------------*/
 
-//game state
-final int START = 0;
-final int PEOPLE = 1;
-final int TABLE = 2;
-final int RUN = 3;
-final int OVER = 4;
-final int WIN = 5;
-int gameState;
+// clock
+int clock_X, clock_Y, clock_W = 150, clock_H = 150;
 
-//food state
+/*--------------ice cream--------------*/
+// cone 
+final int cone_W = 100, cone_H = 160;
+int cone_X = 550, cone_Y = 490;
+// icecream box 
+final int icecream_W = 465, icecream_H = 300;
+int icecream_X = 40, icecream_Y = 320;
+int blueberry_X, blueberry_Y, choco_X, choco_Y, mango_X, mango_Y, matcha_X, matcha_Y, strawberry_X, strawberry_Y, vanilla_X, vanilla_Y;
+int box_W = 120, box_H = 120;
+// icecream put
+int put_W = 100, put_H = 100, put_X = 550, put1_Y, put2_Y, put3_Y;
+PImage [] putlist = {vanilla, blueberry, mango, choco, strawberry, matcha, empty}; //prepare each ice cream image
+int putIcecream1=6, putIcecream2=6, putIcecream3=6; //display three put , empty=6
+boolean put; 
+int putCount; 
+// order
+PFont orderCha;
+PImage [] orderlist = {vanilla, blueberry, mango, choco, strawberry, matcha}; //prepare each ice cream image
+int order1=6, order2=6, order3=6, order1_X = 200, order_Y = 150, order2_X, order3_X; //display three order
+
+int [] orderIcecream() {         //order random and duplicate
+  int[] order = new int[3];
+  int pickOrder;
+  for (int i=0; i<3; i++) {
+    pickOrder = int(random(0, 6));
+    while (isExist(pickOrder, order)) {
+      pickOrder = int(random(0, 6));
+    }
+    order[i] = pickOrder;
+  }
+  order1 = order[0]-1;
+  order2 = order[1]-1;
+  order3 = order[2]-1;
+  return order;
+}
+boolean isExist(int pickOrder, int[]order) {
+  for (int i=0; i<order.length; i++) {
+    if (order[i] == pickOrder) {
+      return true;
+    }
+  }
+  return false;
+}
+// scoop 
+final int scoop_W = 135, scoop_H = 60;
+
+float scoop_X, scoop_Y;
+final int EMPTY = 0;
+final int VANILLA = 1;
+final int BLUEBERRY = 2;
+final int MANGO = 3;
+final int CHOCO = 4;
+final int STRAWBERRY = 5;
+final int MATCHA = 6;
+int scoopState;
+// frost
+float alpha_v, alpha_b, alpha_m, alpha_c, alpha_s, alpha_matcha;  
+float speed_v, speed_b, speed_m, speed_c, speed_s, speed_matcha;  //change alpha speed
+float accessibleSecond_v, accessibleSecond_b, accessibleSecond_m, accessibleSecond_c, accessibleSecond_s, accessibleSecond_matcha; //keep alpha=0 time
+//check
+int isRight(int []order, int []put) {
+  for (int i=0; i<order.length; i++) {
+    for (int j=0; j<put.length; j++) {
+      if (order[i] != put[i]) {
+        return 0;
+      }
+    }
+  }
+  return 1;
+}
+/*--------------ice cream--------------*/
+
 final int BURGER = 0;
 final int FRENCH_FRIES = 1;
 final int ICE_CREAM = 2;
@@ -43,20 +116,28 @@ boolean downPressed = false;
 boolean leftPressed = false;
 boolean rightPressed = false;
 
-//mood
 boolean moodChange;
-int moodScore;
+
+
+/* Add Variable Rule
+ when you want to add any variable, please 
+ 1. write your name 
+ 2. use the comment behind your variable
+ 
+ for example:
+ //add by Yuzen (put your name)
+ int[] burgerQueue = new burgerSeries;  //the order of the material in burger
+ boolean burgerFallen;  //if the material is fallen on the the interal of burger or not
+ 
+ */
+
+
 
 void setup () {
   size(700, 700);
-  foodState = 0; //change the value when you want to test different food
-  
-  //load image
-  //background
-  startBg = loadImage("img/background/startBg.png");
-  peopleBg = loadImage("img/background/peopleBg.png");
-  tableBg = loadImage("img/background/tableBg.png");
+  foodState = 2; //change the value when you want to test different food
 
+  //load image
   //burger
   btmbread = loadImage("img/burger/btmbread.png");
   middlebread = loadImage("img/burger/middlebread.png");
@@ -65,10 +146,7 @@ void setup () {
   lettuce = loadImage("img/burger/lettuce.png");
   meat = loadImage("img/burger/meat.png");
   tomato = loadImage("img/burger/tomato.png");
-  conveyor = loadImage("img/burger/conveyor.png");
-  conveyorGlass = loadImage("img/burger/conveyor_glass.png");
-  
-  
+
   //french fries
   emptyFrenchfries = loadImage("img/french fries/empty_frenchfries.png");
   fewFrenchfries = loadImage("img/french fries/few_frenchfries.png");
@@ -77,117 +155,483 @@ void setup () {
   bug = loadImage("img/french fries/bug.png");
   frenchfry = loadImage("img/french fries/frenchfry.png");
   burnedFrenchfry = loadImage("img/french fries/frenchfry(burned).png");
-  
+
   //ice cream
   cone = loadImage("img/ice cream/cone.png");
-  blurberry = loadImage("img/ice cream/blurberry.png");
+  blueberry = loadImage("img/ice cream/blueberry.png");
   choco = loadImage("img/ice cream/choco.png");
   mango = loadImage("img/ice cream/mango.png");
   matcha = loadImage("img/ice cream/matcha.png");
   strawberry = loadImage("img/ice cream/strawberry.png");
   vanilla = loadImage("img/ice cream/vanilla.png");
-  
-  //drink
-  glass = loadImage("img/drink/glass.png");
-  drinkMachineUp = loadImage("img/drink/drink machine_up.png");
-  drinkMachineDown = loadImage("img/drink/drink machine_down.png");
-  
+  icecream = loadImage("img/ice cream/icecream.png");
+  frost = loadImage("img/ice cream/frost.png");
+  scoop = loadImage("img/ice cream/scoop.png");
+  scoop_b = loadImage("img/ice cream/scoop_b.png");
+  scoop_c = loadImage("img/ice cream/scoop_c.png");
+  scoop_m = loadImage("img/ice cream/scoop_m.png");
+  scoop_matcha = loadImage("img/ice cream/scoop_matcha.png");
+  scoop_s = loadImage("img/ice cream/scoop_s.png");
+  scoop_v = loadImage("img/ice cream/scoop_v.png");
+  frost = loadImage("img/ice cream/frost.png");
+
+  //other
+  glass = loadImage("img/glass.png");
   clock = loadImage("img/clock.png");
+
+  /*--------------french fries--------------*/
+  //bug
+  bug_X = random( bug_MIN_X, bug_MAX_X);
+  bugSpeed = random(2, 7); 
+  //frenchfry1&frenchfry2
+  frenchfry1_X = random( frenchfry_MIN_X, frenchfry_MAX_X);
+  frenchfry2_X = random( frenchfry_MIN_X, frenchfry_MAX_X);
+  frenchfry1Speed = random(2, 9);
+  frenchfry2Speed = random(2, 9);  
+  //burnedFrenchfry
+  burnedFrenchfry_X = random( burnedFrenchfry_MIN_X, burnedFrenchfry_MAX_X);
+  burnedFrenchfrySpeed = random(2, 7);
+  /*--------------french fries--------------*/
   
-  initGame();
+  //clock
+  clock_X = 530;
+  clock_Y = 30;
+  second = createFont("Arial", 24);
+  timeCount = 1860; //30 second
+  
+  /*--------------ice cream--------------*/
+  //order
+  orderCha = createFont("Arial", 24);
+  orderlist[0] = loadImage("img/ice cream/vanilla.png");
+  orderlist[1] = loadImage("img/ice cream/blueberry.png");
+  orderlist[2] = loadImage("img/ice cream/mango.png");
+  orderlist[3] = loadImage("img/ice cream/choco.png");
+  orderlist[4] = loadImage("img/ice cream/strawberry.png");
+  orderlist[5] = loadImage("img/ice cream/matcha.png");
+  order2_X = order1_X + 100;
+  order3_X = order2_X + 100;
+  orderIcecream();
+  //icecream box
+  vanilla_X = icecream_X + 17;
+  vanilla_Y = icecream_Y + 15;  
+  blueberry_X = vanilla_X + box_W + 34;
+  blueberry_Y = icecream_Y + 15;
+  mango_X = blueberry_X + box_W + 34;
+  mango_Y = icecream_Y + 15;  
+  choco_X = icecream_X + 17;
+  choco_Y = vanilla_Y + box_H + 35;
+  strawberry_X = choco_X+ box_W + 34;
+  strawberry_Y = blueberry_Y + box_H + 35;
+  matcha_X =strawberry_X + box_W + 34;
+  matcha_Y = mango_Y + box_W + 32;
+  //put
+  put1_Y = cone_Y + 25 - put_H;
+  put2_Y = cone_Y + 25*2 - put_H*2;
+  put3_Y = cone_Y + 25*3 - put_H*3;
+  putlist[0] = loadImage("img/ice cream/vanilla.png");
+  putlist[1] = loadImage("img/ice cream/blueberry.png");
+  putlist[2] = loadImage("img/ice cream/mango.png");  
+  putlist[3] = loadImage("img/ice cream/choco.png");
+  putlist[4] = loadImage("img/ice cream/strawberry.png");
+  putlist[5] = loadImage("img/ice cream/matcha.png");
+  putlist[6] = loadImage("img/ice cream/empty.png"); 
+  //frost
+  speed_v = random(2, 5); 
+  speed_b = random(2, 5);
+  speed_m = random(2, 5);
+  speed_c = random(2, 5);
+  speed_s = random(2, 5);
+  speed_matcha = random(2, 5);
+  accessibleSecond_v = random(5, 10);
+  accessibleSecond_b = random(5, 10);
+  accessibleSecond_m = random(5, 10); 
+  accessibleSecond_c = random(5, 10);
+  accessibleSecond_s = random(5, 10);
+  accessibleSecond_matcha = random(5, 10);
+  /*--------------ice cream--------------*/
 }
 
 void draw() {
-  switch (gameState){
-    case START:
-    
-      image(startBg, 0 , 0, 700, 700);
-    
+  switch (foodState) { 
+  case BURGER:
+
     break;
 
-    case PEOPLE :
-      image(peopleBg, 0, 0, 700, 700);
-      
-      fTA.fullDisplay(40, 150);
-      
-      mTA.fullDisplay(260, 150);
-
-      teacher.fullDisplay(480, 150);
-      
-    break;  
-    
-    case TABLE:
-      image(tableBg, 0, 0, 700, 700);
-      customer.halfDisplay();
-      moodScore = 5;
-    
-    
-    break;
-
-    case RUN:
-      switch (foodState) { 
-        case BURGER:
-          
-        break;
-        
-        
-        case FRENCH_FRIES:
-          
-        break; 
-        
-        
-        case ICE_CREAM:
-          
-        break;
-        
-        
-        case DRINK:
-          
-        break; 
+  case FRENCH_FRIES:
+    /*----Bag----*/
+    background(255);       
+    image(emptyFrenchfries, frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H);
+    frenchfries_X = mouseX - frenchfries_W/2;
+    // bag movement
+    if (mouseX <= frenchfries_W/2 ) {
+      frenchfries_X = 0;
     }
+    if (mouseX >= width-frenchfries_W/2 ) {
+      frenchfries_X = width-frenchfries_W;
+    }
+    // bag change
+    if (numFrenchfries >= 5) {
+      image(fewFrenchfries, frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H);
+    }
+    if (numFrenchfries >= 10) {
+      image(halfFrenchfries, frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H);
+    }
+    if (numFrenchfries >= 15) {
+      image(fullFrenchfries, frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H);
+      moodChange = true;
+    }
+
+    /*----Time----*/
+    image(clock, clock_X, clock_Y, clock_W, clock_H);
+    textFont(second, 60) ;
+    fill(0) ;
+    timeCount -- ;
+    if (timeCount/60 >= 10) {
+      text(timeCount/60, 575, 140) ;
+    } else {
+      text("0"+timeCount/60, 575, 140) ;
+    }
+    if (timeCount <= 0) {
+      timeCount = 0;
+    }
+    
+    /*----Drop----*/
+    // bug
+    image(bug, bug_X, bug_Y, bug_W, bug_H);
+    bug_Y += bugSpeed;
+    if (bug_Y >= height) {
+      bug_Y = 0;
+      bug_X = random( bug_MIN_X, bug_MAX_X);
+    }    
+    // frenchfry1
+    image(frenchfry, frenchfry1_X, frenchfry1_Y, frenchfry_W, frenchfry_H);
+    frenchfry1_Y += frenchfry1Speed; 
+    if (frenchfry1_Y >= height) {
+      frenchfry1_Y = 0;
+      frenchfry1_X = random( frenchfry_MIN_X, frenchfry_MAX_X);
+    }     
+    // frenchfry2 
+    image(frenchfry, frenchfry2_X, frenchfry2_Y, frenchfry_W, frenchfry_H);
+    frenchfry2_Y += frenchfry2Speed;
+    if (frenchfry2_Y >= height) {
+      frenchfry2_Y = 0;
+      frenchfry2_X = random( frenchfry_MIN_X, frenchfry_MAX_X);
+    }     
+    // burnedFrenchfry
+    image(burnedFrenchfry, burnedFrenchfry_X, burnedFrenchfry_Y, burnedFrenchfry_W, burnedFrenchfry_H);
+    burnedFrenchfry_Y += burnedFrenchfrySpeed;
+    if (burnedFrenchfry_Y >= height) {
+      burnedFrenchfry_Y = 0;
+      burnedFrenchfry_X = random( burnedFrenchfry_MIN_X, burnedFrenchfry_MAX_X);
+    }
+
+    /*----Catch----*/
+    // bug
+    if (isHit(frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H, bug_X, bug_Y, bug_W, bug_H) == true ) {
+      bug_Y = 0;
+      bug_X = random( bug_MIN_X, bug_MAX_X);
+      bug_Y += bugSpeed;
+      moodChange = false;
+    }    
+    // frenchfry1
+    if (isHit(frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H, frenchfry1_X, frenchfry1_Y, frenchfry_W, frenchfry_H) == true ) {
+      frenchfry1_Y = 0;
+      frenchfry1_X = random( frenchfry_MIN_X, frenchfry_MAX_X);
+      frenchfry1_Y += frenchfry1Speed;
+      numFrenchfries ++;
+    }  
+    // frenchfry2 
+    if (isHit(frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H, frenchfry2_X, frenchfry2_Y, frenchfry_W, frenchfry_H) == true ) {
+      frenchfry2_Y = 0;
+      frenchfry2_X = random( frenchfry_MIN_X, frenchfry_MAX_X);
+      frenchfry2_Y += frenchfry2Speed;
+      numFrenchfries ++;
+    } 
+    // burnedFrenchfry
+    if (isHit(frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H, burnedFrenchfry_X, burnedFrenchfry_Y, burnedFrenchfry_W, burnedFrenchfry_H) == true ) {
+      burnedFrenchfry_Y = 0;
+      burnedFrenchfry_X = random( burnedFrenchfry_MIN_X, burnedFrenchfry_MAX_X);
+      burnedFrenchfry_Y += burnedFrenchfrySpeed;
+      moodChange = false;
+      numFrenchfries ++;
+    }
+
+    break; 
+
+
+  case ICE_CREAM:
+    background(255);
+    /*----Cone----*/
+    image(cone, cone_X, cone_Y, cone_W, cone_H);
+
+    /*----Icecream Box----*/
+    image(icecream, icecream_X, icecream_Y, icecream_W, icecream_H); 
+
+    /*----Order----*/
+    //text
+    textFont(orderCha, 40) ;
+    fill(0) ; 
+    text("ORDER:", 20, 200) ;
+    //order icecream
+    image(orderlist[order1], order1_X, order_Y, 70, 70);   
+    image(orderlist[order2], order2_X, order_Y, 70, 70);
+    image(orderlist[order3], order3_X, order_Y, 70, 70);
+
+    /*----Scoop----*/
+    switch(scoopState) {
+    case EMPTY:
+      image(scoop, scoop_X, scoop_Y, scoop_W, scoop_H);
+      break;
+    case VANILLA: 
+      image(scoop_v, scoop_X-12, scoop_Y-7, 147, 67);      
+      if (putIcecream1==6 ) {                                        // if putIcecream1 is empty, put vanilla to putIcecream1
+        putIcecream1 = 0;
+      }
+      if (putIcecream1!=0 && putIcecream2==6 && putIcecream3==6) {   //if putIcecream1 is other icecream, putIcecream2 and putIcecream3 are empty, put vanilla to putIcecream2
+        putIcecream2 = 0;
+      }
+      if (putIcecream1!=0 && putIcecream2!=0 && putIcecream3==6) {   //if putIcecream1 and putIcecream2 are other icecream, putIcecream3 is empty, put vanilla to putIcecream3
+        putIcecream3 = 0;
+      }
+      break;
+    case BLUEBERRY:
+      image(scoop_b, scoop_X-12, scoop_Y-7, 147, 67);
+      if (putIcecream1==6 ) {
+        putIcecream1 = 1;
+      }
+      if (putIcecream1!=1 && putIcecream2==6 && putIcecream3==6) {
+        putIcecream2 = 1;
+      }
+      if (putIcecream1!=1 && putIcecream2!=1 && putIcecream3==6) {
+        putIcecream3 = 1;
+      }       
+      break;    
+    case MANGO:
+      image(scoop_m, scoop_X-12, scoop_Y-7, 147, 67);
+      if (putIcecream1==6 ) {
+        putIcecream1 = 2;
+      }
+      if (putIcecream1!=2 && putIcecream2==6 && putIcecream3==6) {
+        putIcecream2 = 2;
+      }
+      if (putIcecream1!=2 && putIcecream2!=2 && putIcecream3==6 ) {
+        putIcecream3 = 2;
+      }      
+      break;    
+    case CHOCO:
+      image(scoop_c, scoop_X-12, scoop_Y-7, 147, 67);
+      if (putIcecream1==6 ) {
+        putIcecream1 = 3;
+      }
+      if (putIcecream1!=3 && putIcecream2==6 && putIcecream3==6) {
+        putIcecream2 = 3;
+      }
+      if (putIcecream1!=3 && putIcecream2!=3 && putIcecream3==6 ) {
+        putIcecream3 = 3;
+      } 
+      break;    
+    case STRAWBERRY:
+      image(scoop_s, scoop_X-12, scoop_Y-7, 147, 67);
+      if (putIcecream1==6 ) {
+        putIcecream1 = 4;
+      }
+      if (putIcecream1!=4 && putIcecream2==6 && putIcecream3==6) {
+        putIcecream2 = 4;
+      }
+      if (putIcecream1!=4 && putIcecream2!=4 && putIcecream3==6 ) {
+        putIcecream3 = 4;
+      } 
+      break;    
+    case MATCHA:
+      image(scoop_matcha, scoop_X-12, scoop_Y-7, 147, 67);
+      if (putIcecream1==6 ) {
+        putIcecream1 = 5;
+      }
+      if (putIcecream1!=5 && putIcecream2==6 && putIcecream3==6) {
+        putIcecream2 = 5;
+      }
+      if (putIcecream1!=5 && putIcecream2!=5 && putIcecream3==6 ) {
+        putIcecream3 = 5;
+      }       
+      break;
+    }
+    scoop_X = mouseX - scoop_W/2;
+    scoop_Y = mouseY - scoop_H/2;
+    // scoop movement
+    if (mouseX <= scoop_W/2 ) {
+      scoop_X = 0;
+    }
+    if (mouseX >= width-scoop_W/2 ) {
+      scoop_X = width-scoop_W;
+    }  
+    if (mouseY <= scoop_H/2 ) {
+      scoop_Y = 0;
+    }
+    if (mouseY >= height-scoop_H/2 ) {
+      scoop_Y = height-scoop_H;
+    }
+
+    /*----Time----*/
+    image(clock, clock_X, clock_Y, clock_W, clock_H);
+    textFont(second, 60) ;
+    fill(0) ;
+    timeCount -- ;
+    if (timeCount/60 >= 10) {
+      text(timeCount/60, 575, 140) ;
+    } else {
+      text("0"+timeCount/60, 575, 140) ;
+    }
+    if (timeCount <= 0) {
+      timeCount = 0;
+    }    
+
+    /*----UpIcecream----*/
+    // vanilla
+    if (isHit(scoop_X, scoop_Y, 45, 45, vanilla_X, vanilla_Y, box_W, box_H) == true) {     
+      if (mousePressed) { 
+        if (255+alpha_v <= 0) {     
+          scoopState = VANILLA;
+        }
+      }
+    }
+    // blurberry
+    if (isHit(scoop_X, scoop_Y, 45, 45, blueberry_X, blueberry_Y, box_W, box_H) == true) {
+      if (mousePressed) {
+        if (255+alpha_b <= 0) {
+          scoopState = BLUEBERRY;
+        }
+      }
+    }
+    // mango
+    if (isHit(scoop_X, scoop_Y, 45, 45, mango_X, mango_Y, box_W, box_H) == true ) {
+      if (mousePressed) { 
+        if (255+alpha_m <= 0) {
+          scoopState = MANGO;
+        }
+      }
+    }    
+    // choco
+    if (isHit(scoop_X, scoop_Y, 45, 45, choco_X, choco_Y, box_W, box_H) == true ) {
+      if (mousePressed) {
+        if (255+alpha_c <= 0) {
+          scoopState = CHOCO;
+        }
+      }
+    }    
+    // strawberry
+    if (isHit(scoop_X, scoop_Y, 45, 45, strawberry_X, strawberry_Y, box_W, box_H) == true ) {
+      if (mousePressed) { 
+        if (255+alpha_s <= 0) {
+          scoopState = STRAWBERRY;
+        }
+      }
+    }    
+    // matcha
+    if (isHit(scoop_X, scoop_Y, 45, 45, matcha_X, matcha_Y, box_W, box_H) == true ) {
+      if (mousePressed) {
+        if (255+alpha_matcha <= 0) {
+          scoopState = MATCHA;
+        }
+      }
+    }
+
+    /*----DownIcecream----*/
+    if (isHit(scoop_X, scoop_Y, 45, 45, cone_X, icecream_Y, cone_W, 170) == true ) {
+      scoopState = EMPTY;       
+      if (!put) {
+        putCount++;
+      }   
+      put = true;
+    } else {
+      put = false;
+    }
+
+    if (putCount == 1) {
+      image(putlist[putIcecream1], put_X, put1_Y, put_W, put_H);
+    }
+    if (putCount == 2) {
+      image(putlist[putIcecream1], put_X, put1_Y, put_W, put_H);
+      image(putlist[putIcecream2], put_X, put2_Y, put_W, put_H);
+    }   
+    if (putCount == 3) {
+      image(putlist[putIcecream1], put_X, put1_Y, put_W, put_H);
+      image(putlist[putIcecream2], put_X, put2_Y, put_W, put_H);      
+      image(putlist[putIcecream3], put_X, put3_Y, put_W, put_H);
+    }
+
+    /*----Frost----*/
+    //vanilla   
+    alpha_v -= speed_v;
+    tint(255, 255+alpha_v);
+    if (255+alpha_v <= -accessibleSecond_v*speed_v) {
+      alpha_v = 0;
+    }
+    image(frost, vanilla_X, vanilla_Y, box_W, box_H);
+    noTint();
+    //blueberry
+    alpha_b -= speed_b;
+    tint(255, 255+alpha_b);
+    if (255+alpha_b <= -accessibleSecond_b*speed_b) {
+      alpha_b = 0;
+    }
+    image(frost, blueberry_X, vanilla_Y, box_W, box_H);
+    noTint();
+    //mango
+    alpha_m -= speed_m;
+    tint(255, 255+alpha_m);
+    if (255+alpha_m <= -accessibleSecond_m*speed_m) {
+      alpha_m = 0;
+    }
+    image(frost, mango_X, mango_Y, box_W, box_H);
+    noTint();
+    //choco
+    alpha_c -= speed_c;
+    tint(255, 255+alpha_c);
+    if (255+alpha_c <= -accessibleSecond_c*speed_c) {
+      alpha_c = 0;
+    }
+    image(frost, choco_X, choco_Y, box_W, box_H);
+    noTint();
+    //strawberry
+    alpha_s -= speed_s;
+    tint(255, 255+alpha_s);
+    if (255+alpha_s <= -accessibleSecond_s*speed_s) {
+      alpha_s = 0;
+    }
+    image(frost, strawberry_X, strawberry_Y, box_W, box_H);
+    noTint();
+    //matcha
+    alpha_matcha -= speed_matcha; 
+    tint(255, 255+alpha_matcha);
+    if (255+alpha_matcha <= -accessibleSecond_matcha*speed_matcha) {
+      alpha_matcha = 0;
+    }                 
+    image(frost, matcha_X, matcha_Y, box_W, box_H);
+    noTint();
+
+    /*----Check----*/
+    int []orderCheck = {order1, order2, order3};
+    int []putCheck = {putIcecream1, putIcecream2, putIcecream3};
+    if (isRight(orderCheck, putCheck) != 1) {
+      moodChange = false;     
+    }else{
+      moodChange = true;
+    }
+
     break;
 
-    case OVER :
-      
+  case DRINK:
+
     break;
-
-    case WIN :
-      
-    break;  
-
   }
-
-
-  
-        
 }
 
-boolean isHit(int ax, int ay, int aw, int ah, int bx, int by, int bw, int bh){
-  if(ax >= bx-aw && ax <= bx+bw && ay >= by-ah && ay <= by+bh){
+boolean isHit(float ax, float ay, int aw, int ah, float bx, float by, int bw, int bh) {
+  if (ax >= bx-aw && ax <= bx+bw && ay >= by-ah && ay <= by+bh) {
     return true;
-  }else{
+  } else {
     return false;
   }
-}
-
-void initGame(){
-  gameState = START;
-  for(int i = 0; i < 7; i++){
-    foods[i] = null;
-  }
-  
-  fTA = new Person("fTA");
-  fTA.setOrder(new int[]{BURGER, DRINK});
-  
-  mTA = new Person("mTA");
-  fTA.setOrder(new int[]{BURGER, FRENCH_FRIES, DRINK});
-  
-
-  teacher = new Person("teacher");
-  teacher.setOrder(new int[]{BURGER, FRENCH_FRIES, ICE_CREAM, DRINK, BURGER, FRENCH_FRIES, DRINK});
-  
-  
-  customer = new Person();
 }
 
 void keyPressed() {
@@ -210,11 +654,6 @@ void keyPressed() {
 }
 
 void keyReleased() {
-  if ( keyCode == ' '){
-    if (gameState == START){
-      gameState = PEOPLE;
-    }
-  }
   if (key == CODED) {
     switch (keyCode) {
     case UP:
