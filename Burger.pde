@@ -1,7 +1,7 @@
 import java.util.*;
 class Burger extends Food {
   Ingredients[] igds = new Ingredients[6]; //上面的食材
-  int x; //conveyor's x
+  int conveyorX; //conveyor's x
   int conveyorSpeed=5;
   List<Ingredients> burger = new ArrayList<Ingredients>(); //random 漢堡
   Ingredients falling;
@@ -34,37 +34,29 @@ class Burger extends Food {
       igds[i].x =-250-250*i;
       igds[i].y=100;
     }
-    
+
     randomBurger();
   }
 
-void randomBurger() {
-  burger.add(new Ingredients("cheese"));
-  burger.add(new Ingredients("lettuce"));
-  burger.add(new Ingredients("meat"));
-  burger.add(new Ingredients("tomato"));
-  Collections.shuffle(burger);
-  burger.add(new Ingredients("topbread"));
-  burger.add(2, new Ingredients("middlebread"));
-  burger.add(0, new Ingredients("btmbread"));
-}
+  void randomBurger() {
+    burger.add(new Ingredients("cheese"));
+    burger.add(new Ingredients("lettuce"));
+    burger.add(new Ingredients("meat"));
+    burger.add(new Ingredients("tomato"));
+    Collections.shuffle(burger);
+    burger.add(new Ingredients("topbread"));
+    burger.add(2, new Ingredients("middlebread"));
+    burger.add(0, new Ingredients("btmbread"));
+  }
 
-  void showFinished(float x, float y){
+  void showFinished(float x, float y) {
     imageMode(CENTER);
     for (int i = 0; i < burger.size(); i++) {
-      image(burger.get(i).img, x+100, y+20*(8-i), 200, 100);
+      image(burger.get(i).img, x, y+20*(8-i), 200, 100);
+      //image(burger.get(i).img, x, y+20*(8-i), 200, 100);
     }
   }
 
-  void showFinished(float x, float y, float w, float h){
-    imageMode(CENTER);
-    for (int i = 0; i < burger.size(); i++) {
-      image(burger.get(i).img, x+w/2, y+(h/20)+(h/20)*(7-i), w, (h/4));
-    }
-  }
-
-  void conveyorDisplay(){
-
-
+  void conveyorDisplay() {
   }
 }

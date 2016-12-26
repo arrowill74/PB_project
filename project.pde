@@ -47,18 +47,13 @@ void draw() {
   switch (gameState) {
   case START:
     image(startBg, 0, 0, 700, 700);
-
     break;
 
   case PEOPLE :
     image(peopleBg, 0, 0, 700, 700);
-
     fTA.fullDisplay(40, 150);
-
     mTA.fullDisplay(260, 150);
-
     teacher.fullDisplay(480, 150);
-
     break;  
 
   case TABLE:
@@ -70,13 +65,10 @@ void draw() {
     customer.halfDisplay();
     moodScore = 5;
 
-    println(customer.foodCount);
-    for (int i = 0; i < customer.foodCount; ++i) {
-      if (customer.tableX[i] != 0) {
-        foods[i].onTableX = customer.tableX[i];
-        foods[i].onTableY = customer.tableY[i];
-      }
+    for (int i = 0; i < customer.foodCount; i++) {
+      foods[i].displayOnTable();
     }
+
 
     break;
 
@@ -174,12 +166,15 @@ void initGame() {
 
   fTA = new Person("fTA");
   fTA.setOrder(new int[]{BURGER, DRINK, -1, -1, -1, -1, -1});
+  fTA.setTable();
 
   mTA = new Person("mTA");
-  fTA.setOrder(new int[]{BURGER, FRENCH_FRIES, DRINK, -1, -1, -1, -1});
+  mTA.setOrder(new int[]{BURGER, FRENCH_FRIES, DRINK, -1, -1, -1, -1});
+  mTA.setTable();
 
   teacher = new Person("teacher");
   teacher.setOrder(new int[]{BURGER, FRENCH_FRIES, ICE_CREAM, DRINK, BURGER, FRENCH_FRIES, DRINK});
+  teacher.setTable();
 
   customer = new Person();
 }

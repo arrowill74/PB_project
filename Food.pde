@@ -9,13 +9,14 @@ class Food {
   }
 
   void displayOnTable() {
-   if (done == true) {
-     showFinished(onTableX, onTableY);
-     image(check, onTableX, onTableY);
-   } else {
-     showFinished(onTableX, onTableY);
-   }
+    //if (done == true) {
+    //  showFinished(onTableX, onTableY);
+    //  image(check, onTableX, onTableY);
+    //} else {
+      showFinished(onTableX, onTableY);
+      println(onTableX, onTableY);
+    //}
   }
 
-  void showFinished(float x, float y){}
+  void showFinished(float x, float y) {}
 }
