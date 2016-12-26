@@ -1,77 +1,100 @@
-class Person{
-  int[] order = new int[7];
-  int foodCount;
+class Person {
+  int[] order;
   PImage full;
   PImage halo;
   PImage half;
-  int[] tableX;
-  int[] tableY;
-  
-  Person(){}
-  
-  Person(String who){
+  float[] tableX = new float[7];
+  float[] tableY = new float[7];
+  int foodCount = 0;
+
+  Person() {
+  }
+
+  Person(String who) {
     full = loadImage("img/people/" + who + ".png");
     halo = loadImage("img/people/" + who + "Halo.png");
     half = loadImage("img/people/" + who + "Half.png");
-    for (int i = 0; i < 7; ++i) {
-      order[i] = -1;
-    }
   }
 
-  void fullDisplay(int x, int y){
+  void fullDisplay(int x, int y) {
     imageMode(CORNER);
     if (isHit(mouseX, mouseY, 0, 0, x, y, full.width, full.height)) {
-      image(halo, x , y, halo.width, halo.height);
+      image(halo, x, y, halo.width, halo.height);
       if (mousePressed) {
         customer = this;
         gameState = TABLE;
-        for (int i = 0; i < foodCount; ++i) {
-          switch (order[i]) {
+        for (int i = 0; i < 7; ++i) {
+          if (order[i] != -1 ) {
+            switch (order[i]) {
             case BURGER :
               foods[i] = new Burger();
-            break; 
+              break;
+            case FRENCH_FRIES :
+              foods[i] = new FrenchFries();
+              break;  
+            case ICE_CREAM :
+              foods[i] = new IceCream();
+              break;  
+            case DRINK :
+              foods[i] = new Drink();
+              break;
+            default :
+              foods[i] = new Food();
+              break;
+            }
           }
         }
       }
     } else {
-      image(full, x , y, full.width, full.height);
+      image(full, x, y, full.width, full.height);
     }
   }
 
-  void halfDisplay(){
+  void halfDisplay() {
     imageMode(CENTER);
     image(half, 350, 150, half.width, half.height);
   }
 
-  void setOrder(int[] order){
+  void setOrder(int[] order) {
     this.order = order;
-  }
-  
-  void setTable(){
     for (int i = 0; i < 7; ++i) {
-      if (order[i] != -1) {
-        foodCount ++;
-      }
-    }
-    
-    if (foodCount > 3) { //teacher is customer
-      for (int i = 0; i < foodCount; i++) {
-        if (i < 3) {
-          int axisX1 = width / 4;
-          tableX[i] = axisX1*(i+1); 
-          tableY[i] = 400;
-        }else{
-          int axisX2 = width / 5;
-          tableX[i] = axisX2*(i+1); 
-          tableY[i] = 600;
-        }
-      }
-    }else{ //TA is customer
-      int axisX = width / (foodCount+1);
-      for (int i = 0; i < foodCount; i++) {
-        tableX[i] = axisX*(i+1); 
-        tableY[i]= 500;
-      }
+       if (order[i] != -1) {
+         foodCount ++;
+       }
+     }
+    switch (foodCount) {
+      case 2 :
+        tableX[0] = width/3;
+        tableY[0] = 500;
+        tableX[1] = width/3*2;
+        tableY[1] = 500;
+      break;  
+      case 4 :
+        tableX[0] = width/3;
+        tableY[0] = 400;
+        tableX[1] = width/3*2;
+        tableY[1] = 400;
+        tableX[2] = width/3;
+        tableY[2] = 600;
+        tableX[3] = width/3*2;
+        tableY[3] = 600;
+      break;  
+      case 7 :
+        tableX[0] = width/4;
+        tableY[0] = 400;
+        tableX[1] = width/4*2;
+        tableY[1] = 400;
+        tableX[2] = width/4*3;
+        tableY[2] = 400;
+        tableX[3] = width/5;
+        tableY[3] = 600;
+        tableX[1] = width/5*2;
+        tableY[1] = 600;
+        tableX[2] = width/5*3;
+        tableY[2] = 600;
+        tableX[3] = width/5*4;
+        tableY[3] = 600;
+      break;  
     }
   }
 }
