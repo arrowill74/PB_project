@@ -81,6 +81,8 @@ class IceCream extends Food {
   }
   /*--------------ice cream--------------*/
   IceCream () {
+    bg = loadImage("img/background/iceCreamBg.png");
+
     //ice cream
     cone = loadImage("img/ice cream/cone.png");
     blueberry = loadImage("img/ice cream/blueberry.png");
@@ -143,7 +145,7 @@ class IceCream extends Food {
     putlist[5] = loadImage("img/ice cream/matcha.png");
     putlist[6] = loadImage("img/ice cream/empty.png"); 
     //frost
-    speed_v = random(2, 5); 
+    speed_v = random(2, 5);
     speed_b = random(2, 5);
     speed_m = random(2, 5);
     speed_c = random(2, 5);
@@ -156,5 +158,26 @@ class IceCream extends Food {
     accessibleSecond_s = random(5, 10);
     accessibleSecond_matcha = random(5, 10);
     /*--------------ice cream--------------*/
+  }
+  void display() {
+    image(bg, 0, 0);
+  }
+
+  void showFinished(float x, float y) {
+    imageMode(CORNER);
+    //image(fullFrenchfries, onTableX, onTableY, 130 , 160);
+    if (onClick()) {
+      gameState = RUN;
+      foodState = ICE_CREAM;
+      playing = this;
+    }
+  }
+
+  boolean onClick() {
+    if (isHit(onTableX, onTableY, 160, 96, mouseX, mouseY, 1, 1) && mousePressed) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

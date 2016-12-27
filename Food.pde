@@ -1,4 +1,5 @@
 class Food {
+  PImage bg;
   PImage check;
   boolean done = false;
   int type;
@@ -9,14 +10,16 @@ class Food {
   }
 
   void displayOnTable() {
-    //if (done == true) {
-    //  showFinished(onTableX, onTableY);
-    //  image(check, onTableX, onTableY);
-    //} else {
+    if (done == true) {
       showFinished(onTableX, onTableY);
-      println(onTableX, onTableY);
-    //}
+      image(check, onTableX, onTableY);
+    } else {
+      showFinished(onTableX, onTableY);
+    }
   }
 
   void showFinished(float x, float y) {}
+  void display() {}
+  void mousePressed(){}
+  void mouseReleased(){}
 }

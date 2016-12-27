@@ -27,6 +27,8 @@ class FrenchFries extends Food {
   int clock_X, clock_Y, clock_W = 150, clock_H = 150;
 
   FrenchFries () {
+    bg = loadImage("img/background/frenchFriesBg.png");
+
     //french fries
     emptyFrenchfries = loadImage("img/french fries/empty_frenchfries.png");
     fewFrenchfries = loadImage("img/french fries/few_frenchfries.png");
@@ -55,5 +57,26 @@ class FrenchFries extends Food {
     clock_Y = 30;
     second = createFont("Arial", 24);
     timeCount = 1860; //30 second
+  }
+  void display() {
+    image(bg, 0, 0);
+  }
+  
+  void showFinished(float x, float y) {
+    imageMode(CORNER);
+    image(fullFrenchfries, onTableX, onTableY, 130, 160);
+    if (onClick()) {
+      gameState = RUN;
+      foodState = FRENCH_FRIES;
+      playing = this;
+    }
+  }
+
+  boolean onClick() {
+    if (isHit(onTableX, onTableY, 130, 160, mouseX, mouseY, 1, 1) && mousePressed) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

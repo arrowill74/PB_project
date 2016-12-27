@@ -29,34 +29,32 @@ class Person {
     if (isHit(mouseX, mouseY, 0, 0, x, y, full.width, full.height)) {
       image(halo, x, y, halo.width, halo.height);
       if (mousePressed) {
+        setTable();
         customer = this;
-        gameState = TABLE;
+        for (int i = 0; i < 7; ++i) {
+          switch (order[i]) {
+          case BURGER :
+            foods[i] = new Burger();
+            break;
+          case FRENCH_FRIES :
+            foods[i] = new FrenchFries();
+            break;  
+          case ICE_CREAM :
+            foods[i] = new IceCream();
+            break;  
+          case DRINK :
+            foods[i] = new Drink();
+            break;
+          default :
+            foods[i] = new Food();
+            break;
+          }
+        }
         for (int i = 0; i < foodCount; i++) {
           foods[i].onTableX = customer.tableX[i];
           foods[i].onTableY = customer.tableY[i];
-          println(foods[i].onTableX, foods[i].onTableY);
         }
-        for (int i = 0; i < 7; ++i) {
-          if (order[i] != -1 ) {
-            switch (order[i]) {
-            case BURGER :
-              foods[i] = new Burger();
-              break;
-            case FRENCH_FRIES :
-              foods[i] = new FrenchFries();
-              break;  
-            case ICE_CREAM :
-              foods[i] = new IceCream();
-              break;  
-            case DRINK :
-              foods[i] = new Drink();
-              break;
-            default :
-              foods[i] = new Food();
-              break;
-            }
-          }
-        }
+        gameState = TABLE;
       }
     } else {
       image(full, x, y, full.width, full.height);
@@ -65,7 +63,7 @@ class Person {
 
   void halfDisplay() {
     imageMode(CENTER);
-    image(half, 350, 150, half.width, half.height);
+    image(half, 200, 150, half.width, half.height);
   }
 
   void setOrder(int[] order) {
@@ -80,36 +78,34 @@ class Person {
   void setTable() {
     switch (foodCount) {
     case 2 :
-      tableX[0] = width/3;
-      tableY[0] = 500;
-      tableX[1] = width/3*2;
-      tableY[1] = 500;
+      tableX[0] = 125;
+      tableY[0] = 350;
+      tableX[1] = 425;
+      tableY[1] = 350;
       break;  
     case 3 :
-      tableX[0] = width/3;
-      tableY[0] = 400;
-      tableX[1] = width/3*2;
-      tableY[1] = 400;
-      tableX[2] = width/3;
-      tableY[2] = 600;
-      tableX[3] = width/3*2;
-      tableY[3] = 600;
+      tableX[0] = 125;
+      tableY[0] = 325;
+      tableX[1] = 425;
+      tableY[1] = 325;
+      tableX[2] = 275;
+      tableY[2] = 510;
       break;  
     case 7 :
-      tableX[0] = width/4;
-      tableY[0] = 400;
-      tableX[1] = width/4*2;
-      tableY[1] = 400;
-      tableX[2] = width/4*3;
-      tableY[2] = 400;
-      tableX[3] = width/5;
-      tableY[3] = 600;
-      tableX[4] = width/5*2;
-      tableY[4] = 600;
-      tableX[5] = width/5*3;
-      tableY[5] = 600;
-      tableX[6] = width/5*4;
-      tableY[6] = 600;
+      tableX[0] = 125;
+      tableY[0] = 325;
+      tableX[1] = 425;
+      tableY[1] = 325;
+      tableX[2] = 275;
+      tableY[2] = 325;
+      tableX[3] = 25;
+      tableY[3] = 500;
+      tableX[4] = 225;
+      tableY[4] = 500;
+      tableX[5] = 425;
+      tableY[5] = 500;
+      tableX[6] = 545;
+      tableY[6] = 500;
       break;
     }
   }

@@ -4,6 +4,7 @@ PImage startBg, peopleBg, tableBg, table;
 Person fTA, mTA, teacher, customer;
 
 Food[] foods = new Food[7];
+Food playing;
 
 //game state
 final int START = 0;
@@ -39,7 +40,6 @@ void setup () {
   peopleBg = loadImage("img/background/peopleBg.png");
   tableBg = loadImage("img/background/moodBg.png");
   table = loadImage("img/background/table.png");
-
   initGame();
 }
 
@@ -69,27 +69,27 @@ void draw() {
       foods[i].displayOnTable();
     }
 
-
     break;
 
   case RUN:
-    switch (foodState) { 
-    case BURGER:
 
+    switch (foodState) {
+    case BURGER:
+      playing.display();
       break;
 
-
     case FRENCH_FRIES:
-
+      playing.display();
       break; 
 
 
     case ICE_CREAM:
-
+      playing.display();
       break;
 
 
     case DRINK:
+      playing.display();
 
       break;
     }
@@ -105,7 +105,21 @@ void draw() {
   }
 }
 
+void mousePressed() {
+  if (gameState == RUN) {
+    if (foodState == DRINK) {
+      playing.mousePressed();
+    }
+  }
+}
 
+void mouseReleased() {
+  if (gameState == RUN) {
+    if (foodState == DRINK) {
+      playing.mouseReleased();
+    }
+  }
+}
 
 void keyPressed() {
   if (key == CODED) {
@@ -131,7 +145,13 @@ void keyReleased() {
     if (gameState == START) {
       gameState = PEOPLE;
     }
+    if (gameState == RUN) {
+      if (foodState == BURGER) {
+        playing.keyReleased();
+      }
+    }
   }
+
   if (key == CODED) {
     switch (keyCode) {
     case UP:
@@ -150,7 +170,7 @@ void keyReleased() {
   }
 }
 
-boolean isHit(int ax, int ay, int aw, int ah, int bx, int by, int bw, int bh) {
+boolean isHit(float ax, float ay, float aw, float ah, float bx, float by, float bw, float bh) {
   if (ax >= bx-aw && ax <= bx+bw && ay >= by-ah && ay <= by+bh) {
     return true;
   } else {
@@ -160,21 +180,15 @@ boolean isHit(int ax, int ay, int aw, int ah, int bx, int by, int bw, int bh) {
 
 void initGame() {
   gameState = START;
-  for (int i = 0; i < 7; i++) {
-    foods[i] = new Food();
-  }
 
   fTA = new Person("fTA");
   fTA.setOrder(new int[]{BURGER, DRINK, -1, -1, -1, -1, -1});
-  fTA.setTable();
 
   mTA = new Person("mTA");
-  mTA.setOrder(new int[]{BURGER, FRENCH_FRIES, DRINK, -1, -1, -1, -1});
-  mTA.setTable();
+  mTA.setOrder(new int[]{BURGER, DRINK, FRENCH_FRIES, -1, -1, -1, -1});
 
   teacher = new Person("teacher");
-  teacher.setOrder(new int[]{BURGER, FRENCH_FRIES, ICE_CREAM, DRINK, BURGER, FRENCH_FRIES, DRINK});
-  teacher.setTable();
+  teacher.setOrder(new int[]{ICE_CREAM, FRENCH_FRIES, FRENCH_FRIES, BURGER, BURGER, DRINK, DRINK});
 
   customer = new Person();
 }
