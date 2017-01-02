@@ -27,8 +27,10 @@ class FrenchFries extends Food {
   int clock_X, clock_Y, clock_W = 150, clock_H = 150;
 
   FrenchFries () {
+    gray = loadImage("img/grey_food/grey_frenchfries.png");
+    finished = loadImage("img/french fries/full_frenchfries.png");
     bg = loadImage("img/background/frenchFriesBg.png");
-
+    clock = loadImage("img/clock.png");
     //french fries
     emptyFrenchfries = loadImage("img/french fries/empty_frenchfries.png");
     fewFrenchfries = loadImage("img/french fries/few_frenchfries.png");
@@ -60,11 +62,110 @@ class FrenchFries extends Food {
   }
   void display() {
     image(bg, 0, 0);
+    /*----Bag----*/
+    image(emptyFrenchfries, frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H);
+    frenchfries_X = mouseX - frenchfries_W/2;
+    // bag movement
+    if (mouseX <= frenchfries_W/2 ) {
+      frenchfries_X = 0;
+    }
+    if (mouseX >= width-frenchfries_W/2 ) {
+      frenchfries_X = width-frenchfries_W;
+    }
+    // bag change
+    if (numFrenchfries >= 5) {
+      image(fewFrenchfries, frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H);
+    }
+    if (numFrenchfries >= 10) {
+      image(halfFrenchfries, frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H);
+    }
+    if (numFrenchfries >= 15) {
+      image(fullFrenchfries, frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H);
+      //moodChange = true;
+    }
+
+    /*----Time----*/
+    image(clock, clock_X, clock_Y, clock_W, clock_H);
+    textFont(second, 60) ;
+    fill(0) ;
+    timeCount -- ;
+    if (timeCount/60 >= 10) {
+      text(timeCount/60, 575, 140) ;
+    } else {
+      text("0"+timeCount/60, 575, 140) ;
+    }
+    if (timeCount <= 0) {
+      timeCount = 0;
+    }
+
+    /*----Drop----*/
+    // bug
+    image(bug, bug_X, bug_Y, bug_W, bug_H);
+    bug_Y += bugSpeed;
+    if (bug_Y >= height) {
+      bug_Y = 0;
+      bug_X = random( bug_MIN_X, bug_MAX_X);
+    }    
+    // frenchfry1
+    image(frenchfry, frenchfry1_X, frenchfry1_Y, frenchfry_W, frenchfry_H);
+    frenchfry1_Y += frenchfry1Speed; 
+    if (frenchfry1_Y >= height) {
+      frenchfry1_Y = 0;
+      frenchfry1_X = random( frenchfry_MIN_X, frenchfry_MAX_X);
+    }     
+    // frenchfry2 
+    image(frenchfry, frenchfry2_X, frenchfry2_Y, frenchfry_W, frenchfry_H);
+    frenchfry2_Y += frenchfry2Speed;
+    if (frenchfry2_Y >= height) {
+      frenchfry2_Y = 0;
+      frenchfry2_X = random( frenchfry_MIN_X, frenchfry_MAX_X);
+    }     
+    // burnedFrenchfry
+    image(burnedFrenchfry, burnedFrenchfry_X, burnedFrenchfry_Y, burnedFrenchfry_W, burnedFrenchfry_H);
+    burnedFrenchfry_Y += burnedFrenchfrySpeed;
+    if (burnedFrenchfry_Y >= height) {
+      burnedFrenchfry_Y = 0;
+      burnedFrenchfry_X = random( burnedFrenchfry_MIN_X, burnedFrenchfry_MAX_X);
+    }
+
+    /*----Catch----*/
+    // bug
+    if (isHit(frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H, bug_X, bug_Y, bug_W, bug_H) == true ) {
+      bug_Y = 0;
+      bug_X = random( bug_MIN_X, bug_MAX_X);
+      bug_Y += bugSpeed;
+      //moodChange = false;
+    }    
+    // frenchfry1
+    if (isHit(frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H, frenchfry1_X, frenchfry1_Y, frenchfry_W, frenchfry_H) == true ) {
+      frenchfry1_Y = 0;
+      frenchfry1_X = random( frenchfry_MIN_X, frenchfry_MAX_X);
+      frenchfry1_Y += frenchfry1Speed;
+      numFrenchfries ++;
+    }  
+    // frenchfry2 
+    if (isHit(frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H, frenchfry2_X, frenchfry2_Y, frenchfry_W, frenchfry_H) == true ) {
+      frenchfry2_Y = 0;
+      frenchfry2_X = random( frenchfry_MIN_X, frenchfry_MAX_X);
+      frenchfry2_Y += frenchfry2Speed;
+      numFrenchfries ++;
+    } 
+    // burnedFrenchfry
+    if (isHit(frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H, burnedFrenchfry_X, burnedFrenchfry_Y, burnedFrenchfry_W, burnedFrenchfry_H) == true ) {
+      burnedFrenchfry_Y = 0;
+      burnedFrenchfry_X = random( burnedFrenchfry_MIN_X, burnedFrenchfry_MAX_X);
+      burnedFrenchfry_Y += burnedFrenchfrySpeed;
+      //moodChange = false;
+      numFrenchfries ++;
+    }
   }
-  
   void showFinished(float x, float y) {
     imageMode(CORNER);
-    image(fullFrenchfries, onTableX, onTableY, 130, 160);
+    image(finished, x, y, 160, 130);
+  }
+  void showGray(float x, float y) {
+    imageMode(CORNER);
+    image(gray, onTableX, onTableY, 130, 160);
     if (onClick()) {
       gameState = RUN;
       foodState = FRENCH_FRIES;

@@ -3,10 +3,11 @@ class Ingredients {
   int x, y, xSpeed, ySpeed;
   String name;
 
+  Ingredients(){}
+  
   Ingredients(String name) {
     img = loadImage("img/burger/"+name+".png"); 
     this.name = name;
-    //xSpeed = conveyorSpeed;
     ySpeed = 10;
   }
 
@@ -15,7 +16,7 @@ class Ingredients {
   }
 
   void move() {
-    x+=xSpeed;
+    x += xSpeed;
     if (x>750) {
       x=-750;
       y=100;

@@ -1,5 +1,4 @@
 class Person {
-
   PImage full;
   PImage halo;
   PImage half;
@@ -9,8 +8,7 @@ class Person {
   float[] tableY = new float[7];
   int foodCount = 0;
 
-  Person() {
-  }
+  Person() {}
 
   Person(String who) {
     full = loadImage("img/people/" + who + ".png");
@@ -24,46 +22,35 @@ class Person {
     }
   }
 
-  void fullDisplay(int x, int y) {
-    imageMode(CORNER);
-    if (isHit(mouseX, mouseY, 0, 0, x, y, full.width, full.height)) {
-      image(halo, x, y, halo.width, halo.height);
-      if (mousePressed) {
-        setTable();
-        customer = this;
-        for (int i = 0; i < 7; ++i) {
-          switch (order[i]) {
-          case BURGER :
-            foods[i] = new Burger();
-            break;
-          case FRENCH_FRIES :
-            foods[i] = new FrenchFries();
-            break;  
-          case ICE_CREAM :
-            foods[i] = new IceCream();
-            break;  
-          case DRINK :
-            foods[i] = new Drink();
-            break;
-          default :
-            foods[i] = new Food();
-            break;
-          }
-        }
-        for (int i = 0; i < foodCount; i++) {
-          foods[i].onTableX = customer.tableX[i];
-          foods[i].onTableY = customer.tableY[i];
-        }
-        gameState = TABLE;
-      }
-    } else {
-      image(full, x, y, full.width, full.height);
-    }
-  }
-
   void halfDisplay() {
     imageMode(CENTER);
-    image(half, 200, 150, half.width, half.height);
+    image(half, 200, 250, half.width, half.height);
+    setTable();
+    customer = this;
+    for (int i = 0; i < 7; ++i) {
+      switch (order[i]) {
+      case BURGER :
+        foods[i] = new Burger();
+        break;
+      case FRENCH_FRIES :
+        foods[i] = new FrenchFries();
+        break;  
+      case ICE_CREAM :
+        foods[i] = new IceCream();
+        break;  
+      case DRINK :
+        foods[i] = new Drink();
+        break;
+      default :
+        foods[i] = new Food();
+        break;
+      }
+    }
+    for (int i = 0; i < foodCount; i++) {
+      foods[i].onTableX = customer.tableX[i];
+      foods[i].onTableY = customer.tableY[i];
+    }
+    //gameState = TABLE;
   }
 
   void setOrder(int[] order) {
@@ -79,7 +66,7 @@ class Person {
     switch (foodCount) {
     case 2 :
       tableX[0] = 125;
-      tableY[0] = 350;
+      tableY[0] = 375;
       tableX[1] = 425;
       tableY[1] = 350;
       break;  
@@ -109,4 +96,41 @@ class Person {
       break;
     }
   }
+
+  //void fullDisplay(int x, int y) {
+  //  imageMode(CORNER);
+  //  if (isHit(mouseX, mouseY, 0, 0, x, y, full.width, full.height)) {
+  //    image(halo, x, y, halo.width, halo.height);
+  //    if (mousePressed) {
+  //      setTable();
+  //      customer = this;
+  //      for (int i = 0; i < 7; ++i) {
+  //        switch (order[i]) {
+  //        case BURGER :
+  //          foods[i] = new Burger();
+  //          break;
+  //        case FRENCH_FRIES :
+  //          foods[i] = new FrenchFries();
+  //          break;  
+  //        case ICE_CREAM :
+  //          foods[i] = new IceCream();
+  //          break;  
+  //        case DRINK :
+  //          foods[i] = new Drink();
+  //          break;
+  //        default :
+  //          foods[i] = new Food();
+  //          break;
+  //        }
+  //      }
+  //      for (int i = 0; i < foodCount; i++) {
+  //        foods[i].onTableX = customer.tableX[i];
+  //        foods[i].onTableY = customer.tableY[i];
+  //      }
+  //      gameState = TABLE;
+  //    }
+  //  } else {
+  //    image(full, x, y, full.width, full.height);
+  //  }
+  //}
 }

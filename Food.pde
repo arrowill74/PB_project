@@ -1,25 +1,31 @@
 class Food {
   PImage bg;
-  PImage check;
+  PImage finished, gray;
   boolean done = false;
   int type;
   float onTableX;
   float onTableY;
 
-  Food() {
-  }
+  Food() {}
 
   void displayOnTable() {
-    if (done == true) {
+    if (done) {
       showFinished(onTableX, onTableY);
-      image(check, onTableX, onTableY);
     } else {
-      showFinished(onTableX, onTableY);
+      showGray(onTableX, onTableY);
     }
   }
-
+  
+  void showGray(float x, float y) {}
   void showFinished(float x, float y) {}
   void display() {}
-  void mousePressed(){}
-  void mouseReleased(){}
+  
+  void mousePressed() {
+  }
+  void mouseReleased() {
+  }
+  void keyPressed() {
+  }
+  void keyReleased() {
+  }
 }

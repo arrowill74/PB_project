@@ -1,6 +1,6 @@
 class IceCream extends Food {
   //ice cream
-  PImage cone, blueberry, choco, mango, matcha, strawberry, vanilla, empty, icecream, frost, scoop, scoop_b, scoop_c, scoop_m, scoop_matcha, scoop_s, scoop_v ;
+  PImage cone, blueberry, choco, mango, matcha, strawberry, vanilla, empty, icecream, frost, scoop, scoop01, scoop_b, scoop_c, scoop_m, scoop_matcha, scoop_s, scoop_v;
   //clock
   PImage clock;
   PFont second;
@@ -81,8 +81,10 @@ class IceCream extends Food {
   }
   /*--------------ice cream--------------*/
   IceCream () {
+    gray = loadImage("img/grey_food/grey_icecream.png");
+    finished = loadImage("img/ice cream/finished.png");
     bg = loadImage("img/background/iceCreamBg.png");
-
+    clock = loadImage("img/clock.png");
     //ice cream
     cone = loadImage("img/ice cream/cone.png");
     blueberry = loadImage("img/ice cream/blueberry.png");
@@ -94,6 +96,8 @@ class IceCream extends Food {
     icecream = loadImage("img/ice cream/icecream.png");
     frost = loadImage("img/ice cream/frost.png");
     scoop = loadImage("img/ice cream/scoop.png");
+    scoop01 = loadImage("img/ice cream/scoop01.png");
+
     scoop_b = loadImage("img/ice cream/scoop_b.png");
     scoop_c = loadImage("img/ice cream/scoop_c.png");
     scoop_m = loadImage("img/ice cream/scoop_m.png");
@@ -159,13 +163,279 @@ class IceCream extends Food {
     accessibleSecond_matcha = random(5, 10);
     /*--------------ice cream--------------*/
   }
+
   void display() {
     image(bg, 0, 0);
+    /*----Cone----*/
+    image(cone, cone_X, cone_Y, cone_W, cone_H);
+
+    /*----Icecream Box----*/
+    image(icecream, icecream_X, icecream_Y, icecream_W, icecream_H); 
+
+    /*----Order----*/
+    //text
+    textFont(orderCha, 40) ;
+    fill(0) ; 
+    text("ORDER:", 20, 200) ;
+    //order icecream
+    image(orderlist[order1], order1_X, order_Y, 70, 70);   
+    image(orderlist[order2], order2_X, order_Y, 70, 70);
+    image(orderlist[order3], order3_X, order_Y, 70, 70);
+
+    /*----Scoop----*/
+    switch(scoopState) {
+    case EMPTY:
+      image(scoop, scoop_X, scoop_Y, scoop_W, scoop_H);
+      break;
+    case VANILLA: 
+      image(scoop_v, scoop_X-12, scoop_Y-7, 147, 67);      
+      if (putIcecream1==6 ) {                                        // if putIcecream1 is empty, put vanilla to putIcecream1
+        putIcecream1 = 0;
+      }
+      if (putIcecream1!=0 && putIcecream2==6 && putIcecream3==6) {   //if putIcecream1 is other icecream, putIcecream2 and putIcecream3 are empty, put vanilla to putIcecream2
+        putIcecream2 = 0;
+      }
+      if (putIcecream1!=0 && putIcecream2!=0 && putIcecream3==6) {   //if putIcecream1 and putIcecream2 are other icecream, putIcecream3 is empty, put vanilla to putIcecream3
+        putIcecream3 = 0;
+      }
+      break;
+    case BLUEBERRY:
+      image(scoop_b, scoop_X-12, scoop_Y-7, 147, 67);
+      if (putIcecream1==6 ) {
+        putIcecream1 = 1;
+      }
+      if (putIcecream1!=1 && putIcecream2==6 && putIcecream3==6) {
+        putIcecream2 = 1;
+      }
+      if (putIcecream1!=1 && putIcecream2!=1 && putIcecream3==6) {
+        putIcecream3 = 1;
+      }       
+      break;    
+    case MANGO:
+      image(scoop_m, scoop_X-12, scoop_Y-7, 147, 67);
+      if (putIcecream1==6 ) {
+        putIcecream1 = 2;
+      }
+      if (putIcecream1!=2 && putIcecream2==6 && putIcecream3==6) {
+        putIcecream2 = 2;
+      }
+      if (putIcecream1!=2 && putIcecream2!=2 && putIcecream3==6 ) {
+        putIcecream3 = 2;
+      }      
+      break;    
+    case CHOCO:
+      image(scoop_c, scoop_X-12, scoop_Y-7, 147, 67);
+      if (putIcecream1==6 ) {
+        putIcecream1 = 3;
+      }
+      if (putIcecream1!=3 && putIcecream2==6 && putIcecream3==6) {
+        putIcecream2 = 3;
+      }
+      if (putIcecream1!=3 && putIcecream2!=3 && putIcecream3==6 ) {
+        putIcecream3 = 3;
+      } 
+      break;    
+    case STRAWBERRY:
+      image(scoop_s, scoop_X-12, scoop_Y-7, 147, 67);
+      if (putIcecream1==6 ) {
+        putIcecream1 = 4;
+      }
+      if (putIcecream1!=4 && putIcecream2==6 && putIcecream3==6) {
+        putIcecream2 = 4;
+      }
+      if (putIcecream1!=4 && putIcecream2!=4 && putIcecream3==6 ) {
+        putIcecream3 = 4;
+      } 
+      break;    
+    case MATCHA:
+      image(scoop_matcha, scoop_X-12, scoop_Y-7, 147, 67);
+      if (putIcecream1==6 ) {
+        putIcecream1 = 5;
+      }
+      if (putIcecream1!=5 && putIcecream2==6 && putIcecream3==6) {
+        putIcecream2 = 5;
+      }
+      if (putIcecream1!=5 && putIcecream2!=5 && putIcecream3==6 ) {
+        putIcecream3 = 5;
+      }       
+      break;
+    }
+    scoop_X = mouseX - scoop_W/2;
+    scoop_Y = mouseY - scoop_H/2;
+    // scoop movement
+    if (mouseX <= scoop_W/2 ) {
+      scoop_X = 0;
+    }
+    if (mouseX >= width-scoop_W/2 ) {
+      scoop_X = width-scoop_W;
+    }  
+    if (mouseY <= scoop_H/2 ) {
+      scoop_Y = 0;
+    }
+    if (mouseY >= height-scoop_H/2 ) {
+      scoop_Y = height-scoop_H;
+    }
+
+    /*----Time----*/
+    image(clock, clock_X, clock_Y, clock_W, clock_H);
+    textFont(second, 60) ;
+    fill(0) ;
+    timeCount -- ;
+    if (timeCount/60 >= 10) {
+      text(timeCount/60, 575, 140) ;
+    } else {
+      text("0"+timeCount/60, 575, 140) ;
+    }
+    if (timeCount <= 0) {
+      timeCount = 0;
+    }    
+
+    /*----UpIcecream----*/
+    // vanilla
+    if (isHit(scoop_X, scoop_Y, 45, 45, vanilla_X, vanilla_Y, box_W, box_H) == true) {     
+      if (mousePressed) { 
+
+        if (255+alpha_v <= 0) {     
+          scoopState = VANILLA;
+        }
+      }
+    }
+    // blurberry
+    if (isHit(scoop_X, scoop_Y, 45, 45, blueberry_X, blueberry_Y, box_W, box_H) == true) {
+      if (mousePressed) {
+        if (255+alpha_b <= 0) {
+          scoopState = BLUEBERRY;
+        }
+      }
+    }
+    // mango
+    if (isHit(scoop_X, scoop_Y, 45, 45, mango_X, mango_Y, box_W, box_H) == true ) {
+      if (mousePressed) { 
+        if (255+alpha_m <= 0) {
+          scoopState = MANGO;
+        }
+      }
+    }    
+    // choco
+    if (isHit(scoop_X, scoop_Y, 45, 45, choco_X, choco_Y, box_W, box_H) == true ) {
+      if (mousePressed) {
+        if (255+alpha_c <= 0) {
+          scoopState = CHOCO;
+        }
+      }
+    }    
+    // strawberry
+    if (isHit(scoop_X, scoop_Y, 45, 45, strawberry_X, strawberry_Y, box_W, box_H) == true ) {
+      if (mousePressed) { 
+        if (255+alpha_s <= 0) {
+          scoopState = STRAWBERRY;
+        }
+      }
+    }    
+    // matcha
+    if (isHit(scoop_X, scoop_Y, 45, 45, matcha_X, matcha_Y, box_W, box_H) == true ) {
+      if (mousePressed) {
+        if (255+alpha_matcha <= 0) {
+          scoopState = MATCHA;
+        }
+      }
+    }
+
+    /*----DownIcecream----*/
+    if (isHit(scoop_X, scoop_Y, 45, 45, cone_X, icecream_Y, cone_W, 170) == true ) {
+      scoopState = EMPTY;       
+      if (!put) {
+        putCount++;
+      }   
+      put = true;
+    } else {
+      put = false;
+    }
+
+    if (putCount == 1) {
+      image(putlist[putIcecream1], put_X, put1_Y, put_W, put_H);
+    }
+    if (putCount == 2) {
+      image(putlist[putIcecream1], put_X, put1_Y, put_W, put_H);
+      image(putlist[putIcecream2], put_X, put2_Y, put_W, put_H);
+    }   
+    if (putCount == 3) {
+      image(putlist[putIcecream1], put_X, put1_Y, put_W, put_H);
+      image(putlist[putIcecream2], put_X, put2_Y, put_W, put_H);      
+      image(putlist[putIcecream3], put_X, put3_Y, put_W, put_H);
+    }
+
+    /*----Frost----*/
+    //vanilla   
+    alpha_v -= speed_v;
+    tint(255, 255+alpha_v);
+    if (255+alpha_v <= -accessibleSecond_v*speed_v) {
+      alpha_v = 0;
+    }
+    image(frost, vanilla_X, vanilla_Y, box_W, box_H);
+    noTint();
+    //blueberry
+    alpha_b -= speed_b;
+    tint(255, 255+alpha_b);
+    if (255+alpha_b <= -accessibleSecond_b*speed_b) {
+      alpha_b = 0;
+    }
+    image(frost, blueberry_X, vanilla_Y, box_W, box_H);
+    noTint();
+    //mango
+    alpha_m -= speed_m;
+    tint(255, 255+alpha_m);
+    if (255+alpha_m <= -accessibleSecond_m*speed_m) {
+      alpha_m = 0;
+    }
+    image(frost, mango_X, mango_Y, box_W, box_H);
+    noTint();
+    //choco
+    alpha_c -= speed_c;
+    tint(255, 255+alpha_c);
+    if (255+alpha_c <= -accessibleSecond_c*speed_c) {
+      alpha_c = 0;
+    }
+    image(frost, choco_X, choco_Y, box_W, box_H);
+    noTint();
+    //strawberry
+    alpha_s -= speed_s;
+    tint(255, 255+alpha_s);
+    if (255+alpha_s <= -accessibleSecond_s*speed_s) {
+      alpha_s = 0;
+    }
+    image(frost, strawberry_X, strawberry_Y, box_W, box_H);
+    noTint();
+    //matcha
+    alpha_matcha -= speed_matcha; 
+    tint(255, 255+alpha_matcha);
+    if (255+alpha_matcha <= -accessibleSecond_matcha*speed_matcha) {
+      alpha_matcha = 0;
+    }                 
+    image(frost, matcha_X, matcha_Y, box_W, box_H);
+    noTint();
+
+    /*----Check----*/
+    int []orderCheck = {order1, order2, order3};
+    int []putCheck = {putIcecream1, putIcecream2, putIcecream3};
+    if (isRight(orderCheck, putCheck) != 1) {
+      //curblood--;
+    } else {
+      //curblood++;
+    }
   }
 
+  void scoopAnimation() {
+  }
+  
+  
   void showFinished(float x, float y) {
     imageMode(CORNER);
-    //image(fullFrenchfries, onTableX, onTableY, 130 , 160);
+    image(finished, x, y, 160, 130);
+  }
+  void showGray(float x, float y) {
+    imageMode(CORNER);
+    image(gray, onTableX, onTableY, 50, 150);
     if (onClick()) {
       gameState = RUN;
       foodState = ICE_CREAM;
@@ -174,7 +444,7 @@ class IceCream extends Food {
   }
 
   boolean onClick() {
-    if (isHit(onTableX, onTableY, 160, 96, mouseX, mouseY, 1, 1) && mousePressed) {
+    if (isHit(onTableX, onTableY, 50, 150, mouseX, mouseY, 1, 1) && mousePressed) {
       return true;
     } else {
       return false;

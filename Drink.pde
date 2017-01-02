@@ -1,30 +1,40 @@
 class Drink extends Food {
-  //drink
   PImage glass, drinkMachineUp, drinkMachineDown;
-  //drink add by cute peihsin
+
   boolean juicePour = false;
   boolean cokePour = false;
   boolean beerPour = false;
+
   int pourSpeed;
   int drinkHeight;
+
   boolean mouseReleased= false;
 
   Drink () {
+    gray = loadImage("img/grey_food/grey_glass.png");
+
     bg = loadImage("img/background/drinkBg.png");
     glass = loadImage("img/drink/glass.png");
+
     drinkMachineUp = loadImage("img/drink/drink machine_up.png");
     drinkMachineDown = loadImage("img/drink/drink machine_down.png");
   }
 
-  void showFinished(float x, float y) {
+  //on table function
+  void showGray(float x, float y) {
     imageMode(CORNER);
-    image(glass, onTableX, onTableY, 96, 160);
+    image(gray, onTableX, onTableY, 96, 160);
     if (onClick()) {
       gameState = RUN;
       foodState = DRINK;
       playing = this;
     }
   }
+  void showFinished(float x, float y) {
+    imageMode(CORNER);
+    image(finished, x, y, 160, 130);
+  }
+
   boolean onClick() {
     if (isHit(onTableX, onTableY, 96, 160, mouseX, mouseY, 1, 1) && mousePressed) {
       return true;
@@ -33,9 +43,11 @@ class Drink extends Food {
     }
   }
 
+  //game run function
   void display() {
     image(bg, 0, 0);
-    image(drinkMachineDown, 0, 0);
+    image(drinkMachineDown, (width-drinkMachineDown.width)/2, 150);
+
 
     if (mouseReleased) {
       displayDrink();
@@ -64,35 +76,41 @@ class Drink extends Food {
     }
 
     strokeWeight(2);
-    image(glass, 210, 350);
-    image(drinkMachineUp, 0, 0);
+    stroke(255, 0, 0);    
+    line(width/5+5, width*3/4, width/5+5+20, width*3/4);
+    line(width/5+5, width*3/4+10, width/5+5+20, width*3/4+10);
+    image(glass, drinkMachineDown.width/2-20, 500);
+    image(drinkMachineUp, (width-drinkMachineUp.width)/2, 0+150);
+  }
+
+  void judge() {
   }
 
   void mousePressed() {
-    if (mouseX>115 && mouseX<145 && mouseY>260 && mouseY<290) {//juice button 
+    if (mouseX> drinkMachineUp.width/3-15 && mouseX< drinkMachineUp.width/3+15 && mouseY>drinkMachineUp.height*0.7 && mouseY<drinkMachineUp.height*0.76) {//juice button 
       juicePour = true;
-    } else if (mouseX>250 && mouseX<280 && mouseY>260 && mouseY<290) {//coke button
+    } else if (mouseX> drinkMachineUp.width/2+15 && mouseX< drinkMachineUp.width/2+45 && mouseY>drinkMachineUp.height*0.7 && mouseY<drinkMachineUp.height*0.76) {//coke button
       cokePour = true;
-    } else if (mouseX>375 && mouseX<405 && mouseY>260 && mouseY<290) {//beer button
+    } else if (mouseX> drinkMachineUp.width*3/4 && mouseX<drinkMachineUp.width*3/4+30 && mouseY>drinkMachineUp.height*0.7 && mouseY<drinkMachineUp.height*0.76) {//beer button
       beerPour = true;
     }
   }
 
   void mouseReleased() {
-    if (mouseX>115 && mouseX<145 && mouseY>260 && mouseY<290) {//juice button 
+    if (mouseX>drinkMachineUp.width/3-15 && mouseX<drinkMachineUp.width/3+15 && mouseY>drinkMachineUp.height*0.7 && mouseY<drinkMachineUp.height*0.76) {//juice button 
       mouseReleased = true;
       juicePour = false;
-      //moodChange();
+      moodChange();
       initDrink();
-    } else if (mouseX>250 && mouseX<280 && mouseY>260 && mouseY<290) {//coke button
+    } else if (mouseX>drinkMachineUp.width/2+15 && mouseX<drinkMachineUp.width/2+45 && mouseY>drinkMachineUp.height*0.7 && mouseY<drinkMachineUp.height*0.76) {//coke button
       mouseReleased = true;
       cokePour = false;
-      //moodChange();
+      moodChange();
       initDrink();
-    } else if (mouseX>375 && mouseX<405 && mouseY>260 && mouseY<290) {//beer button
+    } else if (mouseX> drinkMachineUp.width*3/4 && mouseX< drinkMachineUp.width*3/4+30 && mouseY>drinkMachineUp.height*0.7 && mouseY<drinkMachineUp.height*0.76) {//beer button
       mouseReleased = true;
       beerPour = false;
-      //moodChange();
+      moodChange();
       initDrink();
     }
   }
@@ -103,25 +121,26 @@ class Drink extends Food {
 
   void displayDrink() {
     noStroke();
-    quad(230, drinkHeight, 310, drinkHeight, 310, 540, 230, 540);//230~
+    quad(drinkMachineDown.width/2, drinkHeight, drinkMachineDown.width/2+glass.width-40, drinkHeight, drinkMachineDown.width/2+glass.width-40, height-10, drinkMachineDown.width/2, height-10);//230~
   }
 
   void pourDrink() {
-    rect(265, 345, 15, 200); //stream
-    if (drinkHeight <= 360) {
+    rect(drinkMachineUp.width/2+35, height*2/3+25, 15, 200); //stream
+    if (drinkHeight <= width-glass.height+10) {
       pourSpeed= 0;
     }           
-    drinkHeight = 540+pourSpeed; //glass bottom:540
+    drinkHeight = height-10+pourSpeed; //glass bottom:geight-10
     pourSpeed--;
-    quad(230, drinkHeight, 310, drinkHeight, 310, 540, 230, 540);//glass width:230~310
+    quad(drinkMachineDown.width/2, drinkHeight, drinkMachineDown.width/2+glass.width-40, drinkHeight, drinkMachineDown.width/2+glass.width-40, height-10, drinkMachineDown.width/2, height-10);//glass width:drinkMachineDown.width/2~drinkMachineDown.width/2+glass.width-40
   }
 
-  //void moodChange() {
-  //  if (drinkHeight>=378 && drinkHeight<=392) {//effective range
-  //    println(moodChange); //mood won't change
-  //  } else {
-  //    moodChange = true; //mood change
-  //    println(moodChange);
-  //  }
-  //}
+  void moodChange() {
+    if (drinkHeight>=width*3/4-2 && drinkHeight<=width*3/4+10+2) {//effective range
+      curblood++;
+      text("Nice Job!", width/2, height/2);
+    } else {
+      curblood--;
+      text("Sucks!", width/2, height/2);
+    }
+  }
 }
