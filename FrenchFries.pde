@@ -81,7 +81,6 @@ class FrenchFries extends Food {
     }
     if (numFrenchfries >= 15) {
       image(fullFrenchfries, frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H);
-      //moodChange = true;
     }
 
     /*----Time----*/
@@ -134,7 +133,7 @@ class FrenchFries extends Food {
       bug_Y = 0;
       bug_X = random( bug_MIN_X, bug_MAX_X);
       bug_Y += bugSpeed;
-      //moodChange = false;
+      curblood -= 2;
     }    
     // frenchfry1
     if (isHit(frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H, frenchfry1_X, frenchfry1_Y, frenchfry_W, frenchfry_H) == true ) {
@@ -142,6 +141,7 @@ class FrenchFries extends Food {
       frenchfry1_X = random( frenchfry_MIN_X, frenchfry_MAX_X);
       frenchfry1_Y += frenchfry1Speed;
       numFrenchfries ++;
+      curblood++;
     }  
     // frenchfry2 
     if (isHit(frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H, frenchfry2_X, frenchfry2_Y, frenchfry_W, frenchfry_H) == true ) {
@@ -149,27 +149,33 @@ class FrenchFries extends Food {
       frenchfry2_X = random( frenchfry_MIN_X, frenchfry_MAX_X);
       frenchfry2_Y += frenchfry2Speed;
       numFrenchfries ++;
+      curblood++;
     } 
     // burnedFrenchfry
     if (isHit(frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H, burnedFrenchfry_X, burnedFrenchfry_Y, burnedFrenchfry_W, burnedFrenchfry_H) == true ) {
       burnedFrenchfry_Y = 0;
       burnedFrenchfry_X = random( burnedFrenchfry_MIN_X, burnedFrenchfry_MAX_X);
       burnedFrenchfry_Y += burnedFrenchfrySpeed;
-      //moodChange = false;
-      numFrenchfries ++;
+      curblood--;
+    }
+    
+    if(numFrenchfries >= 15){
+      foods[foodIndex].done = true;
+      gameState = TABLE;
     }
   }
   void showFinished(float x, float y) {
     imageMode(CORNER);
-    image(finished, x, y, 160, 130);
+    image(finished, x, y, 130, 160);
   }
   void showGray(float x, float y) {
     imageMode(CORNER);
-    image(gray, onTableX, onTableY, 130, 160);
+    image(gray, x, y, 130, 160);
     if (onClick()) {
       gameState = RUN;
       foodState = FRENCH_FRIES;
       playing = this;
+      foodIndex = index;
     }
   }
 

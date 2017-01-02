@@ -8,7 +8,8 @@ class Person {
   float[] tableY = new float[7];
   int foodCount = 0;
 
-  Person() {}
+  Person() {
+  }
 
   Person(String who) {
     full = loadImage("img/people/" + who + ".png");
@@ -27,6 +28,16 @@ class Person {
     image(half, 200, 250, half.width, half.height);
     setTable();
     customer = this;
+    //gameState = TABLE;
+  }
+
+  void setOrder(int[] order) {
+    this.order = order;
+    for (int i = 0; i < 7; ++i) {
+      if (order[i] != -1) {
+        foodCount ++;
+      }
+    }
     for (int i = 0; i < 7; ++i) {
       switch (order[i]) {
       case BURGER :
@@ -44,20 +55,6 @@ class Person {
       default :
         foods[i] = new Food();
         break;
-      }
-    }
-    for (int i = 0; i < foodCount; i++) {
-      foods[i].onTableX = customer.tableX[i];
-      foods[i].onTableY = customer.tableY[i];
-    }
-    //gameState = TABLE;
-  }
-
-  void setOrder(int[] order) {
-    this.order = order;
-    for (int i = 0; i < 7; ++i) {
-      if (order[i] != -1) {
-        foodCount ++;
       }
     }
   }
@@ -94,6 +91,11 @@ class Person {
       tableX[6] = 545;
       tableY[6] = 500;
       break;
+    }
+    for (int i = 0; i < foodCount; i++) {
+      foods[i].onTableX = this.tableX[i];
+      foods[i].onTableY = this.tableY[i];
+      foods[i].index = i;
     }
   }
 

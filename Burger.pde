@@ -60,7 +60,7 @@ class Burger extends Food {
       player[i] = new Ingredients();
     } 
 
-    for (int i=0; i<6; i++) {
+    for (int i=0; i < 6; i++) {
       igds[i].xSpeed = conveyorSpeed;
       igds[i].x = -250-250*i;
       igds[i].y = 100;
@@ -83,12 +83,13 @@ class Burger extends Food {
       gameState = RUN;
       foodState = BURGER;
       playing = this;
+      foodIndex = index;
     }
   }
 
   void showFinished(float x, float y) {
     imageMode(CORNER);
-    image(finished, x, y, 160, 130);
+    image(finished, x, y, 160, 170);
   }
 
   boolean onClick() {
@@ -174,6 +175,8 @@ class Burger extends Food {
 
       if (n == 7) {
         state = CALCULATE;
+        foods[foodIndex].done = true;
+        gameState = TABLE;
       }
       break;
 

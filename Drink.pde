@@ -7,11 +7,14 @@ class Drink extends Food {
 
   int pourSpeed;
   int drinkHeight;
+  int type;
+  
 
   boolean mouseReleased= false;
 
   Drink () {
     gray = loadImage("img/grey_food/grey_glass.png");
+    finished = loadImage("img/grey_food/grey_glass.png");
 
     bg = loadImage("img/background/drinkBg.png");
     glass = loadImage("img/drink/glass.png");
@@ -23,16 +26,17 @@ class Drink extends Food {
   //on table function
   void showGray(float x, float y) {
     imageMode(CORNER);
-    image(gray, onTableX, onTableY, 96, 160);
+    image(gray, x, y, 96, 160);
     if (onClick()) {
       gameState = RUN;
       foodState = DRINK;
       playing = this;
+      foodIndex = index;
     }
   }
   void showFinished(float x, float y) {
     imageMode(CORNER);
-    image(finished, x, y, 160, 130);
+    image(finished, x, y, 96, 160);
   }
 
   boolean onClick() {

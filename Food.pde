@@ -1,10 +1,11 @@
 class Food {
   PImage bg;
   PImage finished, gray;
-  boolean done = false;
+  boolean done;
   int type;
   float onTableX;
   float onTableY;
+  int index;
 
   Food() {}
 

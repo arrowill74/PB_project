@@ -6,6 +6,8 @@ Person fTA, mTA, teacher, customer;
 Food[] foods = new Food[7];
 Food playing;
 
+int foodIndex;
+
 //game state
 final int START = 0;
 final int PEOPLE = 1;
@@ -57,6 +59,9 @@ void setup () {
 }
 
 void draw() {
+  if(curblood > 10){
+    curblood = 10;
+  }
   switch (gameState) {
   case START:
     image(startBg, 0, 0, 700, 700);

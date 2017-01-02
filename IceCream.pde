@@ -427,19 +427,20 @@ class IceCream extends Food {
 
   void scoopAnimation() {
   }
-  
-  
+
+
   void showFinished(float x, float y) {
     imageMode(CORNER);
-    image(finished, x, y, 160, 130);
+    image(finished, x, y, 50, 150);
   }
   void showGray(float x, float y) {
     imageMode(CORNER);
-    image(gray, onTableX, onTableY, 50, 150);
+    image(gray, x, y, 50, 150);
     if (onClick()) {
       gameState = RUN;
       foodState = ICE_CREAM;
       playing = this;
+      foodIndex = index;
     }
   }
 
