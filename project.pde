@@ -1,11 +1,12 @@
 //background
 PImage startBg, peopleBg, tableBg, table;
+PFont text;
 
-Person fTA, mTA, teacher, customer;
-
+Person[] customers = new Person[3];
 Food[] foods = new Food[7];
 Food playing;
 
+int curCustomer;
 int foodIndex;
 
 //game state
@@ -34,17 +35,22 @@ boolean rightPressed = false;
 Blood[] blood = new Blood[10];
 int curblood;
 
-
 void setup () {
   size(700, 700);
-  foodState = 0; //change the value when you want to test different food
-  textFont(createFont("arial.ttf", 20));  
+  text = createFont("Arial", 24);
 
   //load background
   startBg = loadImage("img/background/startBg.png");
   peopleBg = loadImage("img/background/peopleBg.png");
   tableBg = loadImage("img/background/moodBg.png");
   table = loadImage("img/background/table.png");
+
+  customers[0] = new Person("fTA");
+  customers[0].setOrder(new int[]{BURGER, DRINK, -1, -1, -1, -1, -1});
+  customers[1] = new Person("mTA");
+  customers[1].setOrder(new int[]{BURGER, DRINK, FRENCH_FRIES, -1, -1, -1, -1});
+  customers[2] = new Person("teacher");
+  customers[2].setOrder(new int[]{ICE_CREAM, FRENCH_FRIES, FRENCH_FRIES, BURGER, BURGER, DRINK, DRINK});
 
   for (int i = 0; i < blood.length; i++) {
     if (i < 3) {
@@ -55,11 +61,12 @@ void setup () {
       blood[i] = new Blood("happy", i);
     }
   }
+
   initGame();
 }
 
 void draw() {
-  if(curblood > 10){
+  if (curblood > 10) {
     curblood = 10;
   }
   switch (gameState) {
@@ -71,13 +78,13 @@ void draw() {
     //background
     imageMode(CORNER);
     image(tableBg, 0, 0, 700, 400);
-    image(table, 0, 267, 700, 433);
+    image(table, 0, 310, 700, 400);
 
-    teacher.halfDisplay();
+    customers[curCustomer].halfDisplay();
     for (int i = 0; i < blood.length; i++) {
       blood[i].display(curblood);
     }
-    for (int i = 0; i < customer.foodCount; i++) {
+    for (int i = 0; i < customers[curCustomer].foodCount; i++) {
       foods[i].displayOnTable();
     }
 
@@ -134,6 +141,11 @@ void mousePressed() {
       playing.mousePressed();
     }
   }
+  if (gameState == TABLE && isHit(mouseX, mouseY, 0, 0, 650, 650, 50, 50) && checkOrder()) {
+    curCustomer ++;
+    customers[curCustomer].newFood();
+    customers[curCustomer].setTable();
+  }
 }
 
 void mouseReleased() {
@@ -167,6 +179,8 @@ void keyReleased() {
   if ( keyCode == ' ') {
     if (gameState == START) {
       gameState = TABLE;
+      customers[curCustomer].newFood();
+      customers[curCustomer].setTable();
     }
     if (gameState == RUN) {
       if (foodState == BURGER) {
@@ -201,18 +215,20 @@ boolean isHit(float ax, float ay, float aw, float ah, float bx, float by, float 
   }
 }
 
+boolean checkOrder() {
+  int count = 0;
+  for ( int i = 0; i < 7; i++) {
+    count += customers[curCustomer].order[i];
+  }
+  if (count == -7) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 void initGame() {
-  gameState = TABLE;
+  gameState = START;
   curblood = 5;
-
-  fTA = new Person("fTA");
-  fTA.setOrder(new int[]{BURGER, DRINK, -1, -1, -1, -1, -1});
-
-  mTA = new Person("mTA");
-  mTA.setOrder(new int[]{BURGER, DRINK, FRENCH_FRIES, -1, -1, -1, -1});
-
-  teacher = new Person("teacher");
-  teacher.setOrder(new int[]{ICE_CREAM, FRENCH_FRIES, FRENCH_FRIES, BURGER, BURGER, DRINK, DRINK});
-
-  customer = new Person();
+  curCustomer = 2;
 }

@@ -4,17 +4,17 @@ class Burger extends Food {
     cheese, lettuce, meat, tomato, 
     conveyor, conveyorGlass, plate;
 
-  Ingredients[] igds = new Ingredients[6]; //上面的食材
-  Ingredients[] player = new Ingredients[7]; //建造中的漢堡
-  List<Ingredients> burger = new ArrayList<Ingredients>(); //random 漢堡
+  Ingredients[] igds = new Ingredients[6];
+  Ingredients[] player = new Ingredients[7];
+  List<Ingredients> burger = new ArrayList<Ingredients>();
   Ingredients falling;
   boolean igdFalling = false;
 
   int conveyorX; //conveyor's x
   int conveyorSpeed=5;
 
-  int n = 1; //第幾層漢堡
-  float CenterOfGravity; //重心
+  int n = 1;
+  float CenterOfGravity;
 
   // clock
   PImage clock;
@@ -24,12 +24,13 @@ class Burger extends Food {
 
   //state
   int state;
-  final int SAMPLE = 0;
-  final int STACK = 1;
-  final int CALCULATE = 2;
+  final int SAMPLE = 3;
 
   Burger () {
     bg = loadImage("img/background/burgerBg.png");
+    intro = loadImage("img/intro/burgerIntro.png");
+    startBtn = loadImage("img/button/start.png");
+    finBtn = loadImage("img/button/finish.png");
     gray = loadImage("img/grey_food/grey_burger.png");
     finished = loadImage("img/burger/finished.png");
     clock = loadImage("img/clock.png");
@@ -46,7 +47,7 @@ class Burger extends Food {
     conveyor = loadImage("img/burger/conveyor.png");
     conveyorGlass = loadImage("img/burger/conveyor_glass.png");
 
-    state = SAMPLE;
+    state = INTRO;
     igds[0] = new Ingredients("middlebread");
     igds[1] = new Ingredients("topbread");
     igds[2] = new Ingredients("cheese");
@@ -71,7 +72,6 @@ class Burger extends Food {
     clock_Y = 30;
     second = createFont("Arial", 24);
     timeCount = 360;
-
     randomBurger();
   }
 
@@ -103,6 +103,14 @@ class Burger extends Food {
   void display() {
     image(bg, 0, 0);
     switch (state) {
+    case INTRO :
+      imageMode(CORNER);
+      image(intro, 0, 0);
+      image(startBtn, 600, 650);
+      if (isHit(mouseX, mouseY, 0, 0, 600, 650, startBtn.width, startBtn.height) && mousePressed) {
+        state = SAMPLE;
+      }
+      break;  
     case SAMPLE :
       //random burger image
       for (int i = 0; i < burger.size(); i++) {
@@ -117,11 +125,11 @@ class Burger extends Food {
       text(timeCount/60, 590, 140);
       if (timeCount <= 50) {
         timeCount = 0;
-        state = STACK;
+        state = PLAY;
       }
       break;
 
-    case STACK :
+    case PLAY :
       //test sample, should be delete
       for (int i = 0; i < burger.size(); i++) {
         image(burger.get(i).img, 0, 580-i*20);
@@ -174,16 +182,31 @@ class Burger extends Food {
       image(conveyorGlass, 0, 50);
 
       if (n == 7) {
-        state = CALCULATE;
-        foods[foodIndex].done = true;
-        gameState = TABLE;
+        state = FINISH;
       }
       break;
 
-    case CALCULATE :
-      for (int i=0; i < n; i++) {
-        image(burger.get(i).img, player[i].x, player[i].y );
+    case FINISH :
+      float g = CenterOfGravity();
+      if (g > 50) {
+        text("ugly", 300, 200);
+      } else if (g > 25) {
+        text("good", 300, 200);
+      } else {
+        text("perfect", 300, 200);
       }
+
+      image(plate, 235, 500);
+      for (int i=0; i < n; i++) {
+        image(burger.get(i).img, player[i].x, player[i].y-150);
+      }
+      image(finBtn, 600, 650);
+      if (isHit(mouseX, mouseY, 0, 0, 600, 650, finBtn.width, finBtn.height) && mousePressed) {
+        foods[foodIndex].done = true;
+        customers[curCustomer].order[foodIndex] = -1;
+        gameState = TABLE;
+      }
+
       break;
     }
   }
@@ -216,7 +239,7 @@ class Burger extends Food {
   float CenterOfGravity() {
     float sum = 0;
     for (int i = 0; i < player.length; i++) {
-      sum += (player[i].x+100)-width/2;
+      sum += (abs(player[i].x+100)-width/2);
     }
     CenterOfGravity = sum/7;
     return CenterOfGravity;

@@ -1,12 +1,16 @@
 class Food {
-  PImage bg;
+  PImage bg, intro, startBtn, finBtn;
   PImage finished, gray;
   boolean done;
   int type;
   float onTableX;
   float onTableY;
   int index;
-
+  int state;
+  final int INTRO = 0;
+  final int PLAY = 1;
+  final int FINISH = 2;
+  
   Food() {}
 
   void displayOnTable() {

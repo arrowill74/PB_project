@@ -27,6 +27,9 @@ class FrenchFries extends Food {
   int clock_X, clock_Y, clock_W = 150, clock_H = 150;
 
   FrenchFries () {
+    intro = loadImage("img/intro/FFIntro.png");
+    startBtn = loadImage("img/button/start.png");
+    finBtn = loadImage("img/button/finish.png");
     gray = loadImage("img/grey_food/grey_frenchfries.png");
     finished = loadImage("img/french fries/full_frenchfries.png");
     bg = loadImage("img/background/frenchFriesBg.png");
@@ -62,106 +65,129 @@ class FrenchFries extends Food {
   }
   void display() {
     image(bg, 0, 0);
-    /*----Bag----*/
-    image(emptyFrenchfries, frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H);
-    frenchfries_X = mouseX - frenchfries_W/2;
-    // bag movement
-    if (mouseX <= frenchfries_W/2 ) {
-      frenchfries_X = 0;
-    }
-    if (mouseX >= width-frenchfries_W/2 ) {
-      frenchfries_X = width-frenchfries_W;
-    }
-    // bag change
-    if (numFrenchfries >= 5) {
-      image(fewFrenchfries, frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H);
-    }
-    if (numFrenchfries >= 10) {
-      image(halfFrenchfries, frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H);
-    }
-    if (numFrenchfries >= 15) {
-      image(fullFrenchfries, frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H);
-    }
+    switch (state) {
+    case INTRO :
+      imageMode(CORNER);
+      image(intro, 0, 0);
+      image(startBtn, 600, 650);
+      if (isHit(mouseX, mouseY, 0, 0, 600, 650, startBtn.width, startBtn.height) && mousePressed) {
+        state = PLAY;
+      }
+      break;  
 
-    /*----Time----*/
-    image(clock, clock_X, clock_Y, clock_W, clock_H);
-    textFont(second, 60) ;
-    fill(0) ;
-    timeCount -- ;
-    if (timeCount/60 >= 10) {
-      text(timeCount/60, 575, 140) ;
-    } else {
-      text("0"+timeCount/60, 575, 140) ;
-    }
-    if (timeCount <= 0) {
-      timeCount = 0;
-    }
 
-    /*----Drop----*/
-    // bug
-    image(bug, bug_X, bug_Y, bug_W, bug_H);
-    bug_Y += bugSpeed;
-    if (bug_Y >= height) {
-      bug_Y = 0;
-      bug_X = random( bug_MIN_X, bug_MAX_X);
-    }    
-    // frenchfry1
-    image(frenchfry, frenchfry1_X, frenchfry1_Y, frenchfry_W, frenchfry_H);
-    frenchfry1_Y += frenchfry1Speed; 
-    if (frenchfry1_Y >= height) {
-      frenchfry1_Y = 0;
-      frenchfry1_X = random( frenchfry_MIN_X, frenchfry_MAX_X);
-    }     
-    // frenchfry2 
-    image(frenchfry, frenchfry2_X, frenchfry2_Y, frenchfry_W, frenchfry_H);
-    frenchfry2_Y += frenchfry2Speed;
-    if (frenchfry2_Y >= height) {
-      frenchfry2_Y = 0;
-      frenchfry2_X = random( frenchfry_MIN_X, frenchfry_MAX_X);
-    }     
-    // burnedFrenchfry
-    image(burnedFrenchfry, burnedFrenchfry_X, burnedFrenchfry_Y, burnedFrenchfry_W, burnedFrenchfry_H);
-    burnedFrenchfry_Y += burnedFrenchfrySpeed;
-    if (burnedFrenchfry_Y >= height) {
-      burnedFrenchfry_Y = 0;
-      burnedFrenchfry_X = random( burnedFrenchfry_MIN_X, burnedFrenchfry_MAX_X);
-    }
+    case PLAY :
+      /*----Bag----*/
+      image(emptyFrenchfries, frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H);
+      frenchfries_X = mouseX - frenchfries_W/2;
+      // bag movement
+      if (mouseX <= frenchfries_W/2 ) {
+        frenchfries_X = 0;
+      }
+      if (mouseX >= width-frenchfries_W/2 ) {
+        frenchfries_X = width-frenchfries_W;
+      }
+      // bag change
+      if (numFrenchfries >= 5) {
+        image(fewFrenchfries, frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H);
+      }
+      if (numFrenchfries >= 10) {
+        image(halfFrenchfries, frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H);
+      }
+      if (numFrenchfries >= 15) {
+        image(fullFrenchfries, frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H);
+      }
 
-    /*----Catch----*/
-    // bug
-    if (isHit(frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H, bug_X, bug_Y, bug_W, bug_H) == true ) {
-      bug_Y = 0;
-      bug_X = random( bug_MIN_X, bug_MAX_X);
+      /*----Time----*/
+      image(clock, clock_X, clock_Y, clock_W, clock_H);
+      textFont(second, 60) ;
+      fill(0) ;
+      timeCount -- ;
+      if (timeCount/60 >= 10) {
+        text(timeCount/60, 575, 140) ;
+      } else {
+        text("0"+timeCount/60, 575, 140) ;
+      }
+      if (timeCount <= 0) {
+        timeCount = 0;
+      }
+
+      /*----Drop----*/
+      // bug
+      image(bug, bug_X, bug_Y, bug_W, bug_H);
       bug_Y += bugSpeed;
-      curblood -= 2;
-    }    
-    // frenchfry1
-    if (isHit(frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H, frenchfry1_X, frenchfry1_Y, frenchfry_W, frenchfry_H) == true ) {
-      frenchfry1_Y = 0;
-      frenchfry1_X = random( frenchfry_MIN_X, frenchfry_MAX_X);
-      frenchfry1_Y += frenchfry1Speed;
-      numFrenchfries ++;
-      curblood++;
-    }  
-    // frenchfry2 
-    if (isHit(frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H, frenchfry2_X, frenchfry2_Y, frenchfry_W, frenchfry_H) == true ) {
-      frenchfry2_Y = 0;
-      frenchfry2_X = random( frenchfry_MIN_X, frenchfry_MAX_X);
+      if (bug_Y >= height) {
+        bug_Y = 0;
+        bug_X = random( bug_MIN_X, bug_MAX_X);
+      }    
+      // frenchfry1
+      image(frenchfry, frenchfry1_X, frenchfry1_Y, frenchfry_W, frenchfry_H);
+      frenchfry1_Y += frenchfry1Speed; 
+      if (frenchfry1_Y >= height) {
+        frenchfry1_Y = 0;
+        frenchfry1_X = random( frenchfry_MIN_X, frenchfry_MAX_X);
+      }     
+      // frenchfry2 
+      image(frenchfry, frenchfry2_X, frenchfry2_Y, frenchfry_W, frenchfry_H);
       frenchfry2_Y += frenchfry2Speed;
-      numFrenchfries ++;
-      curblood++;
-    } 
-    // burnedFrenchfry
-    if (isHit(frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H, burnedFrenchfry_X, burnedFrenchfry_Y, burnedFrenchfry_W, burnedFrenchfry_H) == true ) {
-      burnedFrenchfry_Y = 0;
-      burnedFrenchfry_X = random( burnedFrenchfry_MIN_X, burnedFrenchfry_MAX_X);
+      if (frenchfry2_Y >= height) {
+        frenchfry2_Y = 0;
+        frenchfry2_X = random( frenchfry_MIN_X, frenchfry_MAX_X);
+      }     
+      // burnedFrenchfry
+      image(burnedFrenchfry, burnedFrenchfry_X, burnedFrenchfry_Y, burnedFrenchfry_W, burnedFrenchfry_H);
       burnedFrenchfry_Y += burnedFrenchfrySpeed;
-      curblood--;
-    }
-    
-    if(numFrenchfries >= 15){
-      foods[foodIndex].done = true;
-      gameState = TABLE;
+      if (burnedFrenchfry_Y >= height) {
+        burnedFrenchfry_Y = 0;
+        burnedFrenchfry_X = random( burnedFrenchfry_MIN_X, burnedFrenchfry_MAX_X);
+      }
+
+      /*----Catch----*/
+      // bug
+      if (isHit(frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H, bug_X, bug_Y, bug_W, bug_H) == true ) {
+        bug_Y = 0;
+        bug_X = random( bug_MIN_X, bug_MAX_X);
+        bug_Y += bugSpeed;
+        curblood -= 2;
+      }    
+      // frenchfry1
+      if (isHit(frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H, frenchfry1_X, frenchfry1_Y, frenchfry_W, frenchfry_H) == true ) {
+        frenchfry1_Y = 0;
+        frenchfry1_X = random( frenchfry_MIN_X, frenchfry_MAX_X);
+        frenchfry1_Y += frenchfry1Speed;
+        numFrenchfries ++;
+        curblood++;
+      }  
+      // frenchfry2 
+      if (isHit(frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H, frenchfry2_X, frenchfry2_Y, frenchfry_W, frenchfry_H) == true ) {
+        frenchfry2_Y = 0;
+        frenchfry2_X = random( frenchfry_MIN_X, frenchfry_MAX_X);
+        frenchfry2_Y += frenchfry2Speed;
+        numFrenchfries ++;
+        curblood++;
+      } 
+      // burnedFrenchfry
+      if (isHit(frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H, burnedFrenchfry_X, burnedFrenchfry_Y, burnedFrenchfry_W, burnedFrenchfry_H) == true ) {
+        burnedFrenchfry_Y = 0;
+        burnedFrenchfry_X = random( burnedFrenchfry_MIN_X, burnedFrenchfry_MAX_X);
+        burnedFrenchfry_Y += burnedFrenchfrySpeed;
+        curblood--;
+      }
+
+      if (numFrenchfries >= 15) {
+        foods[foodIndex].done = true;
+        state = FINISH;
+      }
+      break;
+
+    case FINISH :
+      image(finBtn, 600, 650);
+      if (isHit(mouseX, mouseY, 0, 0, 600, 650, finBtn.width, finBtn.height) && mousePressed) {
+        foods[foodIndex].done = true;
+        customers[curCustomer].order[foodIndex] = -1;
+        gameState = TABLE;
+      }
+      break;
     }
   }
   void showFinished(float x, float y) {

@@ -1,6 +1,5 @@
 class Person {
   PImage full;
-  PImage halo;
   PImage half;
 
   int[] order = new int[7];
@@ -8,12 +7,8 @@ class Person {
   float[] tableY = new float[7];
   int foodCount = 0;
 
-  Person() {
-  }
-
   Person(String who) {
     full = loadImage("img/people/" + who + ".png");
-    halo = loadImage("img/people/" + who + "Halo.png");
     half = loadImage("img/people/" + who + "Half.png");
 
     for (int i = 0; i < 7; i++) {
@@ -25,10 +20,8 @@ class Person {
 
   void halfDisplay() {
     imageMode(CENTER);
-    image(half, 200, 250, half.width, half.height);
-    setTable();
-    customer = this;
-    //gameState = TABLE;
+    image(half, 150, 223, half.width, half.height);
+    //customer = this;
   }
 
   void setOrder(int[] order) {
@@ -38,6 +31,9 @@ class Person {
         foodCount ++;
       }
     }
+  }
+
+  void newFood() {
     for (int i = 0; i < 7; ++i) {
       switch (order[i]) {
       case BURGER :
@@ -50,7 +46,13 @@ class Person {
         foods[i] = new IceCream();
         break;  
       case DRINK :
-        foods[i] = new Drink();
+        if(curCustomer == 0){
+          foods[i] = new Drink(0);
+        }else if(curCustomer == 1){
+          foods[i] = new Drink(1);
+        }else{
+          foods[i] = new Drink(2);
+        }
         break;
       default :
         foods[i] = new Food();
