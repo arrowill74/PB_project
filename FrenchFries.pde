@@ -27,7 +27,7 @@ class FrenchFries extends Food {
   int clock_X, clock_Y, clock_W = 150, clock_H = 150;
 
   FrenchFries () {
-    bugSound = minim.loadSample( "sound/bug.wav", 512);
+    bugSound = minim.loadSample( "sound/bug.mp3", 512);
     intro = loadImage("img/intro/FFIntro.png");
     startBtn = loadImage("img/button/start.png");
     finBtn = loadImage("img/button/finish.png");
@@ -189,19 +189,29 @@ class FrenchFries extends Food {
       if (numFrenchfries >= 15) {
         image(fullFrenchfries, 250, 250, 200, 250);
         image(finBtn, 600, 650);
+        if (!soundCtrl) {
+          complete.trigger();
+          soundCtrl = true;
+        }
         bloodChange(bloodCtrl, 2);
         if (isHit(mouseX, mouseY, 0, 0, 600, 650, finBtn.width, finBtn.height) && mousePressed) {
           foods[foodIndex].done = true;
           customers[curCustomer].order[foodIndex] = -1;
           gameState = TABLE;
+          soundCtrl = false;
         }
       } else {
         image(againbtn, 600, 650);
+        if (!soundCtrl) {
+          wrong.trigger();
+          soundCtrl = true;
+        }
         bloodChange(bloodCtrl, -1);
         if (isHit(mouseX, mouseY, 0, 0, 600, 650, againbtn.width, againbtn.height) && mousePressed) {
           state = PLAY;
           timeCount = 930;
           numFrenchfries = 0;
+          soundCtrl = false;
         }
         if (numFrenchfries >= 10) {
           image(halfFrenchfries, 250, 250, 200, 250);

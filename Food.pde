@@ -1,6 +1,7 @@
 class Food {
   PImage bg, intro, startBtn, finBtn, againbtn;
   PImage finished, gray;
+  AudioSample complete, wrong;
   boolean done;
   int type;
   float onTableX;
@@ -12,6 +13,8 @@ class Food {
   final int FINISH = 2;
 
   Food() {
+    complete = minim.loadSample( "sound/complete2.wav", 512);
+    wrong = minim.loadSample( "sound/wrong.wav", 512);
   }
 
   void displayOnTable() {

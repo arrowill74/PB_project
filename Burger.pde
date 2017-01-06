@@ -169,6 +169,7 @@ class Burger extends Food {
           } else {
             curblood--;
             state = SAMPLE;
+            wrong.trigger();
             timeCount = 240;
             n = 1;
           }
@@ -186,6 +187,7 @@ class Burger extends Food {
 
       if (n == 7) {
         state = FINISH;
+        complete.trigger();
       }
       break;
 

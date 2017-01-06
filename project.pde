@@ -38,12 +38,13 @@ boolean rightPressed = false;
 Blood[] blood = new Blood[10];
 int curblood;
 boolean bloodCtrl;
+boolean soundCtrl = false;
 
 void setup () {
   size(700, 700);
   text = createFont("Arial", 24);
   minim = new Minim(this);
-  music = minim.loadFile("music/Little-waltz.mp3", 1024);
+  music = minim.loadFile("music/test.mp3", 1024);
   music.play();
   music.loop();
 
