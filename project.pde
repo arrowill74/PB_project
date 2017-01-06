@@ -1,5 +1,5 @@
 //background
-PImage startBg, peopleBg, tableBg, table;
+PImage startBg, peopleBg, tableBg, table, next;
 PFont text;
 
 Person[] customers = new Person[3];
@@ -45,6 +45,7 @@ void setup () {
   peopleBg = loadImage("img/background/peopleBg.png");
   tableBg = loadImage("img/background/moodBg.png");
   table = loadImage("img/background/table.png");
+  next = loadImage("img/button/next.png");
 
   customers[0] = new Person("fTA");
   customers[0].setOrder(new int[]{BURGER, DRINK, -1, -1, -1, -1, -1});
@@ -90,8 +91,11 @@ void draw() {
     for (int i = 0; i < customers[curCustomer].foodCount; i++) {
       foods[i].displayOnTable();
     }
-    if(curCustomer >= 3){
+    if (curCustomer >= 3) {
       gameState = PEOPLE;
+    }
+    if (checkOrder()) {
+      image(next, 600, 650);
     }
 
     break;
@@ -137,7 +141,6 @@ void draw() {
     customers[1].fullDisplay(260, 250);
     customers[2].fullDisplay(480, 250);
     break;
-    
   }
 }
 
@@ -147,7 +150,7 @@ void mousePressed() {
       playing.mousePressed();
     }
   }
-  if (gameState == TABLE && isHit(mouseX, mouseY, 0, 0, 650, 650, 50, 50) && checkOrder()) {
+  if (gameState == TABLE && isHit(mouseX, mouseY, 0, 0, 600, 650, 100, 50) && checkOrder()) {
     curCustomer ++;
     customers[curCustomer].newFood();
     customers[curCustomer].setTable();
