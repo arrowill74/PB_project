@@ -1,6 +1,7 @@
 class Person {
   PImage full;
   PImage half;
+  PImage sad;
 
   int[] order = new int[7];
   float[] tableX = new float[7];
@@ -10,7 +11,7 @@ class Person {
   Person(String who) {
     full = loadImage("img/people/" + who + ".png");
     half = loadImage("img/people/" + who + "Half.png");
-
+    sad = loadImage("img/people/" + who + "Sad.png");
     for (int i = 0; i < 7; i++) {
       order[i] = -1;
       tableX[i] = -1;
@@ -46,11 +47,11 @@ class Person {
         foods[i] = new IceCream();
         break;  
       case DRINK :
-        if(curCustomer == 0){
+        if (curCustomer == 0) {
           foods[i] = new Drink(0);
-        }else if(curCustomer == 1){
+        } else if (curCustomer == 1) {
           foods[i] = new Drink(1);
-        }else{
+        } else {
           foods[i] = new Drink(2);
         }
         break;
@@ -101,40 +102,12 @@ class Person {
     }
   }
 
-  //void fullDisplay(int x, int y) {
-  //  imageMode(CORNER);
-  //  if (isHit(mouseX, mouseY, 0, 0, x, y, full.width, full.height)) {
-  //    image(halo, x, y, halo.width, halo.height);
-  //    if (mousePressed) {
-  //      setTable();
-  //      customer = this;
-  //      for (int i = 0; i < 7; ++i) {
-  //        switch (order[i]) {
-  //        case BURGER :
-  //          foods[i] = new Burger();
-  //          break;
-  //        case FRENCH_FRIES :
-  //          foods[i] = new FrenchFries();
-  //          break;  
-  //        case ICE_CREAM :
-  //          foods[i] = new IceCream();
-  //          break;  
-  //        case DRINK :
-  //          foods[i] = new Drink();
-  //          break;
-  //        default :
-  //          foods[i] = new Food();
-  //          break;
-  //        }
-  //      }
-  //      for (int i = 0; i < foodCount; i++) {
-  //        foods[i].onTableX = customer.tableX[i];
-  //        foods[i].onTableY = customer.tableY[i];
-  //      }
-  //      gameState = TABLE;
-  //    }
-  //  } else {
-  //    image(full, x, y, full.width, full.height);
-  //  }
-  //}
+  void fullDisplay(int x, int y) {
+    imageMode(CORNER);
+    image(full, x, y, full.width, full.height);
+  }
+  void sadDisplay(int x, int y) {
+    imageMode(CORNER);
+    image(sad, x, y, sad.width, sad.height);
+  }
 }

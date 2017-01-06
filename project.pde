@@ -34,6 +34,7 @@ boolean rightPressed = false;
 //mood
 Blood[] blood = new Blood[10];
 int curblood;
+boolean bloodCtrl;
 
 void setup () {
   size(700, 700);
@@ -68,6 +69,8 @@ void setup () {
 void draw() {
   if (curblood > 10) {
     curblood = 10;
+  } else if (curblood < 0) {
+    gameState = OVER;
   }
   switch (gameState) {
   case START:
@@ -79,13 +82,16 @@ void draw() {
     imageMode(CORNER);
     image(tableBg, 0, 0, 700, 400);
     image(table, 0, 310, 700, 400);
-
+    bloodCtrl = false;
     customers[curCustomer].halfDisplay();
     for (int i = 0; i < blood.length; i++) {
       blood[i].display(curblood);
     }
     for (int i = 0; i < customers[curCustomer].foodCount; i++) {
       foods[i].displayOnTable();
+    }
+    if(curCustomer >= 3){
+      gameState = PEOPLE;
     }
 
     break;
@@ -119,20 +125,20 @@ void draw() {
 
 
   case OVER :
-
+    image(peopleBg, 0, 0, 700, 700);
+    customers[0].sadDisplay(40, 250);
+    customers[1].sadDisplay(260, 250);
+    customers[2].sadDisplay(480, 250);
     break;
 
   case WIN :
-
+    image(peopleBg, 0, 0, 700, 700);
+    customers[0].fullDisplay(40, 250);
+    customers[1].fullDisplay(260, 250);
+    customers[2].fullDisplay(480, 250);
     break;
+    
   }
-
-  //case PEOPLE :
-  //  image(peopleBg, 0, 0, 700, 700);
-  //  fTA.fullDisplay(40, 150);
-  //  mTA.fullDisplay(260, 150);
-  //  teacher.fullDisplay(480, 150);
-  //  break;
 }
 
 void mousePressed() {
@@ -151,6 +157,9 @@ void mousePressed() {
 void mouseReleased() {
   if (gameState == RUN) {
     if (foodState == DRINK) {
+      playing.mouseReleased();
+    }
+    if (foodState == ICE_CREAM) {
       playing.mouseReleased();
     }
   }
@@ -230,5 +239,5 @@ boolean checkOrder() {
 void initGame() {
   gameState = START;
   curblood = 5;
-  curCustomer = 2;
+  curCustomer = 0;
 }

@@ -20,6 +20,7 @@ class Drink extends Food {
     intro = loadImage("img/intro/drinkIntro.png");
     startBtn = loadImage("img/button/start.png");
     finBtn = loadImage("img/button/finish.png");
+    againbtn = loadImage("img/button/again.png");
     bg = loadImage("img/background/drinkBg.png");
     glass = loadImage("img/drink/glass.png");
 
@@ -102,8 +103,11 @@ class Drink extends Food {
       break;
 
     case FINISH :
+      displayDrink();
+      image(glass, drinkMachineDown.width/2-20, 500);
       textFont(text, 60);
-      fill(0);
+      textAlign(CENTER);
+      //fill(0);
       if (judge()) {
         image(finBtn, 600, 650);
         if (isHit(mouseX, mouseY, 0, 0, 600, 650, finBtn.width, finBtn.height) && mousePressed) {
@@ -112,8 +116,8 @@ class Drink extends Food {
           gameState = TABLE;
         }
       } else {
-        image(finBtn, 600, 650); //should be replaced with againBtn
-        if (isHit(mouseX, mouseY, 0, 0, 600, 650, finBtn.width, finBtn.height) && mousePressed) {
+        image(againbtn, 600, 650);
+        if (isHit(mouseX, mouseY, 0, 0, 600, 650, againbtn.width, againbtn.height) && mousePressed) {
           state = PLAY;
         }
       }

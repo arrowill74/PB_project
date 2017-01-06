@@ -120,6 +120,7 @@ class Burger extends Food {
       //clock display
       image(clock, clock_X, clock_Y, clock_W, clock_H);
       textFont(second, 60);
+      textAlign(LEFT);
       fill(0) ;
       timeCount -- ;
       text(timeCount/60, 590, 140);
@@ -159,7 +160,7 @@ class Burger extends Food {
           player[n].x = falling.x;
           player[n].y = height-100-n*20;
           if (player[n].name == burger.get(n).name) {
-            curblood++;
+            //curblood++;
             if (n < 7) {
               n++;
             }
@@ -188,12 +189,15 @@ class Burger extends Food {
 
     case FINISH :
       float g = CenterOfGravity();
-      if (g > 50) {
+      if (g > 10) {
         text("ugly", 300, 200);
-      } else if (g > 25) {
+        bloodChange(bloodCtrl, -1);
+      } else if (g > 5) {
         text("good", 300, 200);
+        bloodChange(bloodCtrl, 1);
       } else {
         text("perfect", 300, 200);
+        bloodChange(bloodCtrl, 2);
       }
 
       image(plate, 235, 500);

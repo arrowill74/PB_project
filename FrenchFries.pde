@@ -30,6 +30,7 @@ class FrenchFries extends Food {
     intro = loadImage("img/intro/FFIntro.png");
     startBtn = loadImage("img/button/start.png");
     finBtn = loadImage("img/button/finish.png");
+    againbtn = loadImage("img/button/again.png");
     gray = loadImage("img/grey_food/grey_frenchfries.png");
     finished = loadImage("img/french fries/full_frenchfries.png");
     bg = loadImage("img/background/frenchFriesBg.png");
@@ -61,7 +62,7 @@ class FrenchFries extends Food {
     clock_X = 530;
     clock_Y = 30;
     second = createFont("Arial", 24);
-    timeCount = 1860; //30 second
+    timeCount = 930;
   }
   void display() {
     image(bg, 0, 0);
@@ -110,6 +111,7 @@ class FrenchFries extends Food {
       }
       if (timeCount <= 0) {
         timeCount = 0;
+        state = FINISH;
       }
 
       /*----Drop----*/
@@ -156,7 +158,7 @@ class FrenchFries extends Food {
         frenchfry1_X = random( frenchfry_MIN_X, frenchfry_MAX_X);
         frenchfry1_Y += frenchfry1Speed;
         numFrenchfries ++;
-        curblood++;
+        curblood ++;
       }  
       // frenchfry2 
       if (isHit(frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H, frenchfry2_X, frenchfry2_Y, frenchfry_W, frenchfry_H) == true ) {
@@ -164,7 +166,7 @@ class FrenchFries extends Food {
         frenchfry2_X = random( frenchfry_MIN_X, frenchfry_MAX_X);
         frenchfry2_Y += frenchfry2Speed;
         numFrenchfries ++;
-        curblood++;
+        curblood ++;
       } 
       // burnedFrenchfry
       if (isHit(frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H, burnedFrenchfry_X, burnedFrenchfry_Y, burnedFrenchfry_W, burnedFrenchfry_H) == true ) {
@@ -181,11 +183,30 @@ class FrenchFries extends Food {
       break;
 
     case FINISH :
-      image(finBtn, 600, 650);
-      if (isHit(mouseX, mouseY, 0, 0, 600, 650, finBtn.width, finBtn.height) && mousePressed) {
-        foods[foodIndex].done = true;
-        customers[curCustomer].order[foodIndex] = -1;
-        gameState = TABLE;
+      if (numFrenchfries >= 15) {
+        image(fullFrenchfries, 250, 250, 200, 250);
+        image(finBtn, 600, 650);
+        bloodChange(bloodCtrl, 2);
+        if (isHit(mouseX, mouseY, 0, 0, 600, 650, finBtn.width, finBtn.height) && mousePressed) {
+          foods[foodIndex].done = true;
+          customers[curCustomer].order[foodIndex] = -1;
+          gameState = TABLE;
+        }
+      } else {
+        image(againbtn, 600, 650);
+        bloodChange(bloodCtrl, -1);
+        if (isHit(mouseX, mouseY, 0, 0, 600, 650, againbtn.width, againbtn.height) && mousePressed) {
+          state = PLAY;
+          timeCount = 930;
+          numFrenchfries = 0;
+        }
+        if (numFrenchfries >= 10) {
+          image(halfFrenchfries, 250, 250, 200, 250);
+        } else if (numFrenchfries >= 5) {
+          image(fewFrenchfries, 250, 250, 200, 250);
+        } else {
+          image(emptyFrenchfries, 250, 250, 200, 250);
+        }
       }
       break;
     }
