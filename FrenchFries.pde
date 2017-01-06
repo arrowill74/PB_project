@@ -5,7 +5,7 @@ class FrenchFries extends Food {
   PImage clock;
   PFont second;
   int timeCount;
-
+  AudioSample bugSound;
   // french fries 
   final int frenchfries_W = 130, frenchfries_H = 160;
   float frenchfries_X = width/2 - frenchfries_W/2, frenchfries_Y = 450; //薯條包
@@ -27,6 +27,7 @@ class FrenchFries extends Food {
   int clock_X, clock_Y, clock_W = 150, clock_H = 150;
 
   FrenchFries () {
+    bugSound = minim.loadSample( "sound/bug.wav", 512);
     intro = loadImage("img/intro/FFIntro.png");
     startBtn = loadImage("img/button/start.png");
     finBtn = loadImage("img/button/finish.png");
@@ -102,6 +103,7 @@ class FrenchFries extends Food {
       /*----Time----*/
       image(clock, clock_X, clock_Y, clock_W, clock_H);
       textFont(second, 60) ;
+      textAlign(LEFT);
       fill(0) ;
       timeCount -- ;
       if (timeCount/60 >= 10) {
@@ -151,6 +153,7 @@ class FrenchFries extends Food {
         bug_X = random( bug_MIN_X, bug_MAX_X);
         bug_Y += bugSpeed;
         curblood -= 2;
+        bugSound.trigger();
       }    
       // frenchfry1
       if (isHit(frenchfries_X, frenchfries_Y, frenchfries_W, frenchfries_H, frenchfry1_X, frenchfry1_Y, frenchfry_W, frenchfry_H) == true ) {

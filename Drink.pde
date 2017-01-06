@@ -16,7 +16,7 @@ class Drink extends Food {
     state = INTRO;
     this.type = type;
     gray = loadImage("img/grey_food/grey_glass.png");
-    finished = loadImage("img/grey_food/grey_glass.png");
+    finished = loadImage("img/drink/glass.png");
     intro = loadImage("img/intro/drinkIntro.png");
     startBtn = loadImage("img/button/start.png");
     finBtn = loadImage("img/button/finish.png");

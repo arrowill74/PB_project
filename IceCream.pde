@@ -1,7 +1,9 @@
 class IceCream extends Food {
   //ice cream
   PImage cone, blueberry, choco, mango, matcha, strawberry, vanilla, empty, icecream, frost, scoop, scoop01, scoop_b, scoop_c, scoop_m, scoop_matcha, scoop_s, scoop_v;
-  
+
+  AudioSample frozen;
+
   //clock
   PImage clock;
   PFont second;
@@ -83,6 +85,7 @@ class IceCream extends Food {
   }
   /*--------------ice cream--------------*/
   IceCream () {
+    frozen = minim.loadSample( "sound/frozen.aiff", 512);
     intro = loadImage("img/intro/iceIntro.png");
     startBtn = loadImage("img/button/start.png");
     finBtn = loadImage("img/button/finish.png");
@@ -194,6 +197,7 @@ class IceCream extends Food {
       //text
       textFont(orderCha, 40) ;
       fill(0) ; 
+      textAlign(LEFT);
       text("ORDER:", 20, 200) ;
       //order icecream
       image(orderlist[order1], order1_X, order_Y, 70, 70);   
@@ -297,6 +301,7 @@ class IceCream extends Food {
       /*----Time----*/
       image(clock, clock_X, clock_Y, clock_W, clock_H);
       textFont(second, 60) ;
+      textAlign(LEFT);
       fill(0) ;
       timeCount -- ;
       if (timeCount/60 >= 10) {
@@ -311,39 +316,51 @@ class IceCream extends Food {
       /*----UpIcecream----*/
       if (mousePressed) {
         // vanilla
-        if (isHit(scoop_X, scoop_Y, 45, 45, vanilla_X, vanilla_Y, box_W, box_H) == true) {     
+        if (isHit(scoop_X, scoop_Y, 45, 45, vanilla_X, vanilla_Y, box_W, box_H)) {  
           if (255+alpha_v <= 0) {     
             scoopState = VANILLA;
+          } else {
+            frozen.trigger();
           }
         }
         // blurberry
-        if (isHit(scoop_X, scoop_Y, 45, 45, blueberry_X, blueberry_Y, box_W, box_H) == true) {
+        if (isHit(scoop_X, scoop_Y, 45, 45, blueberry_X, blueberry_Y, box_W, box_H)) {
           if (255+alpha_b <= 0) {
             scoopState = BLUEBERRY;
+          } else {
+            frozen.trigger();
           }
         }
         // mango
-        if (isHit(scoop_X, scoop_Y, 45, 45, mango_X, mango_Y, box_W, box_H) == true ) {
+        if (isHit(scoop_X, scoop_Y, 45, 45, mango_X, mango_Y, box_W, box_H)) {
           if (255+alpha_m <= 0) {
             scoopState = MANGO;
+          } else {
+            frozen.trigger();
           }
         }    
         // choco
-        if (isHit(scoop_X, scoop_Y, 45, 45, choco_X, choco_Y, box_W, box_H) == true ) {
+        if (isHit(scoop_X, scoop_Y, 45, 45, choco_X, choco_Y, box_W, box_H)) {
           if (255+alpha_c <= 0) {
             scoopState = CHOCO;
+          } else {
+            frozen.trigger();
           }
         }    
         // strawberry
-        if (isHit(scoop_X, scoop_Y, 45, 45, strawberry_X, strawberry_Y, box_W, box_H) == true ) {
+        if (isHit(scoop_X, scoop_Y, 45, 45, strawberry_X, strawberry_Y, box_W, box_H)) {
           if (255+alpha_s <= 0) {
             scoopState = STRAWBERRY;
+          } else {
+            frozen.trigger();
           }
         }    
         // matcha
-        if (isHit(scoop_X, scoop_Y, 45, 45, matcha_X, matcha_Y, box_W, box_H) == true ) {
+        if (isHit(scoop_X, scoop_Y, 45, 45, matcha_X, matcha_Y, box_W, box_H)) {
           if (255+alpha_matcha <= 0) {
             scoopState = MATCHA;
+          } else {
+            frozen.trigger();
           }
         }
       }
@@ -435,6 +452,7 @@ class IceCream extends Food {
       /*----Check----*/
       int []orderCheck = {order1, order2, order3};
       int []putCheck = {putIcecream1, putIcecream2, putIcecream3};
+      textAlign(CENTER);
       if (isRight(orderCheck, putCheck) != 1) {
         text("Wrong", 350, 200);
         bloodChange(bloodCtrl, -1);
@@ -485,13 +503,8 @@ class IceCream extends Food {
     timeCount = 1860; //30 second
     orderIcecream();
     putCount = 0;
-    putIcecream1 = 0;
-    putIcecream2 = 0;
-    putIcecream3 = 0;
-  }
-  void mouseReleased() {
-    if (state == PLAY) {
-      scoopState = EMPTY;
-    }
+    putIcecream1=6;
+    putIcecream2=6;
+    putIcecream3=6;
   }
 }

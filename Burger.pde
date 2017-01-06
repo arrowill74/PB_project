@@ -3,7 +3,7 @@ class Burger extends Food {
   PImage btmbread, middlebread, topbread, 
     cheese, lettuce, meat, tomato, 
     conveyor, conveyorGlass, plate;
-
+  AudioSample fall;
   Ingredients[] igds = new Ingredients[6];
   Ingredients[] player = new Ingredients[7];
   List<Ingredients> burger = new ArrayList<Ingredients>();
@@ -27,6 +27,8 @@ class Burger extends Food {
   final int SAMPLE = 3;
 
   Burger () {
+    fall = minim.loadSample( "sound/burgerFall.wav", 512);
+
     bg = loadImage("img/background/burgerBg.png");
     intro = loadImage("img/intro/burgerIntro.png");
     startBtn = loadImage("img/button/start.png");
@@ -189,6 +191,7 @@ class Burger extends Food {
 
     case FINISH :
       float g = CenterOfGravity();
+      textAlign(CENTER);
       if (g > 10) {
         text("ugly", 300, 200);
         bloodChange(bloodCtrl, -1);
@@ -230,6 +233,7 @@ class Burger extends Food {
     if ( keyCode == ' ') {
       for (int i=0; i<igds.length; i++) {
         if (igds[i].x>=150 && igds[i].x<=330) {
+          fall.trigger();
           igds[i].disappear();
           falling = new Ingredients(igds[i].name);
           falling.x = igds[i].x;

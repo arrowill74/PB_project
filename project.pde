@@ -1,5 +1,9 @@
 //background
-PImage startBg, peopleBg, tableBg, table, next;
+import ddf.minim.*;
+Minim minim;
+AudioPlayer music;
+
+PImage startBg, peopleBg, tableBg, table, next, angry, happy;
 PFont text;
 
 Person[] customers = new Person[3];
@@ -11,11 +15,10 @@ int foodIndex;
 
 //game state
 final int START = 0;
-final int PEOPLE = 1;
-final int TABLE = 2;
-final int RUN = 3;
-final int OVER = 4;
-final int WIN = 5;
+final int TABLE = 1;
+final int RUN = 2;
+final int OVER = 3;
+final int WIN = 4;
 int gameState;
 
 //food state
@@ -39,6 +42,10 @@ boolean bloodCtrl;
 void setup () {
   size(700, 700);
   text = createFont("Arial", 24);
+  minim = new Minim(this);
+  music = minim.loadFile("music/Little-waltz.mp3", 1024);
+  music.play();
+  music.loop();
 
   //load background
   startBg = loadImage("img/background/startBg.png");
@@ -46,6 +53,8 @@ void setup () {
   tableBg = loadImage("img/background/moodBg.png");
   table = loadImage("img/background/table.png");
   next = loadImage("img/button/next.png");
+  angry = loadImage("img/bubble/angry.png");
+  happy = loadImage("img/bubble/happy.png");
 
   customers[0] = new Person("fTA");
   customers[0].setOrder(new int[]{BURGER, DRINK, -1, -1, -1, -1, -1});
@@ -70,7 +79,7 @@ void setup () {
 void draw() {
   if (curblood > 10) {
     curblood = 10;
-  } else if (curblood < 0) {
+  } else if (curblood < 1) {
     gameState = OVER;
   }
   switch (gameState) {
@@ -90,9 +99,6 @@ void draw() {
     }
     for (int i = 0; i < customers[curCustomer].foodCount; i++) {
       foods[i].displayOnTable();
-    }
-    if (curCustomer >= 3) {
-      gameState = PEOPLE;
     }
     if (checkOrder()) {
       image(next, 600, 650);
@@ -126,10 +132,9 @@ void draw() {
     }
     break;
 
-
-
   case OVER :
     image(peopleBg, 0, 0, 700, 700);
+    image(angry, 0, 0, 700, 233);
     customers[0].sadDisplay(40, 250);
     customers[1].sadDisplay(260, 250);
     customers[2].sadDisplay(480, 250);
@@ -137,6 +142,7 @@ void draw() {
 
   case WIN :
     image(peopleBg, 0, 0, 700, 700);
+    image(happy, 0, 0, 700, 233);
     customers[0].fullDisplay(40, 250);
     customers[1].fullDisplay(260, 250);
     customers[2].fullDisplay(480, 250);
@@ -152,8 +158,12 @@ void mousePressed() {
   }
   if (gameState == TABLE && isHit(mouseX, mouseY, 0, 0, 600, 650, 100, 50) && checkOrder()) {
     curCustomer ++;
-    customers[curCustomer].newFood();
-    customers[curCustomer].setTable();
+    if (curCustomer >= 3) {
+      gameState = WIN;
+    } else {
+      customers[curCustomer].newFood();
+      customers[curCustomer].setTable();
+    }
   }
 }
 
@@ -242,5 +252,5 @@ boolean checkOrder() {
 void initGame() {
   gameState = START;
   curblood = 5;
-  curCustomer = 0;
+  curCustomer = 2;
 }

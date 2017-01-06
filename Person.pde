@@ -2,6 +2,7 @@ class Person {
   PImage full;
   PImage half;
   PImage sad;
+  PImage bubble;
 
   int[] order = new int[7];
   float[] tableX = new float[7];
@@ -12,6 +13,7 @@ class Person {
     full = loadImage("img/people/" + who + ".png");
     half = loadImage("img/people/" + who + "Half.png");
     sad = loadImage("img/people/" + who + "Sad.png");
+    bubble = loadImage("img/bubble/" + who + "Table.png");
     for (int i = 0; i < 7; i++) {
       order[i] = -1;
       tableX[i] = -1;
@@ -22,7 +24,7 @@ class Person {
   void halfDisplay() {
     imageMode(CENTER);
     image(half, 150, 223, half.width, half.height);
-    //customer = this;
+    image(bubble, 450, 185, 338, 203);
   }
 
   void setOrder(int[] order) {
