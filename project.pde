@@ -2,8 +2,9 @@
 import ddf.minim.*;
 Minim minim;
 AudioPlayer music;
-
-PImage startBg, peopleBg, tableBg, table, next, angry, happy;
+AudioPlayer win;
+AudioSample over;
+PImage startBg, peopleBg, tableBg, table, next1, next2, angry, happy;
 PFont text;
 
 Person[] customers = new Person[3];
@@ -45,6 +46,8 @@ void setup () {
   text = createFont("Arial", 24);
   minim = new Minim(this);
   music = minim.loadFile("music/test.mp3", 1024);
+  win = minim.loadFile("music/happy.mp3", 1024);
+  over = minim.loadSample("sound/over.mp3", 1024);
   music.play();
   music.loop();
 
@@ -53,7 +56,8 @@ void setup () {
   peopleBg = loadImage("img/background/peopleBg.png");
   tableBg = loadImage("img/background/moodBg.png");
   table = loadImage("img/background/table.png");
-  next = loadImage("img/button/next.png");
+  next1 = loadImage("img/people/mTAHalfBlack.png");
+  next2 = loadImage("img/people/teacherHalfBlack.png");
   angry = loadImage("img/bubble/angry.png");
   happy = loadImage("img/bubble/happy.png");
 
@@ -82,6 +86,11 @@ void draw() {
     curblood = 10;
   } else if (curblood < 1) {
     gameState = OVER;
+    if (!soundCtrl) {
+      music.pause();
+      over.trigger();
+      soundCtrl = true;
+    }
   }
   switch (gameState) {
   case START:
@@ -89,9 +98,27 @@ void draw() {
     break;
 
   case TABLE:
+    if (curCustomer == 2 && checkOrder()) {
+      gameState = WIN;
+      if (!soundCtrl) {
+        music.pause();
+        win.play();
+        soundCtrl = true;
+      }
+    }
     //background
     imageMode(CORNER);
     image(tableBg, 0, 0, 700, 400);
+    if (checkOrder()) {
+      if (curCustomer == 0) {
+        imageMode(CENTER);
+        image(next1, 50, 223);
+      } else if (curCustomer ==1) {
+        imageMode(CENTER);
+        image(next2, 50, 223);
+      }
+    }
+    imageMode(CORNER);
     image(table, 0, 310, 700, 400);
     bloodCtrl = false;
     customers[curCustomer].halfDisplay();
@@ -101,9 +128,7 @@ void draw() {
     for (int i = 0; i < customers[curCustomer].foodCount; i++) {
       foods[i].displayOnTable();
     }
-    if (checkOrder()) {
-      image(next, 600, 650);
-    }
+
 
     break;
 
@@ -157,14 +182,10 @@ void mousePressed() {
       playing.mousePressed();
     }
   }
-  if (gameState == TABLE && isHit(mouseX, mouseY, 0, 0, 600, 650, 100, 50) && checkOrder()) {
+  if (gameState == TABLE && isHit(mouseX, mouseY, 0, 0, 0, 0, 150, 300) && checkOrder() && curCustomer < 2) {
     curCustomer ++;
-    if (curCustomer >= 3) {
-      gameState = WIN;
-    } else {
-      customers[curCustomer].newFood();
-      customers[curCustomer].setTable();
-    }
+    customers[curCustomer].newFood();
+    customers[curCustomer].setTable();
   }
 }
 
@@ -253,5 +274,5 @@ boolean checkOrder() {
 void initGame() {
   gameState = START;
   curblood = 5;
-  curCustomer = 2;
+  curCustomer = 0;
 }

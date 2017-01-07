@@ -91,9 +91,9 @@ class Person {
       tableY[3] = 500;
       tableX[4] = 225;
       tableY[4] = 500;
-      tableX[5] = 425;
+      tableX[5] = 400;
       tableY[5] = 500;
-      tableX[6] = 545;
+      tableX[6] = 525;
       tableY[6] = 500;
       break;
     }

@@ -1,6 +1,6 @@
 class IceCream extends Food {
   //ice cream
-  PImage cone, blueberry, choco, mango, matcha, strawberry, vanilla, empty, icecream, frost, scoop, scoop01, scoop_b, scoop_c, scoop_m, scoop_matcha, scoop_s, scoop_v;
+  PImage cone, blueberry, choco, mango, matcha, strawberry, vanilla, empty, icecream, frost, scoop, scoop01, scoop_b, scoop_c, scoop_m, scoop_matcha, scoop_s, scoop_v, comment;
 
   AudioSample frozen;
 
@@ -85,6 +85,7 @@ class IceCream extends Food {
   }
   /*--------------ice cream--------------*/
   IceCream () {
+    comment = loadImage("img/bubble/comment.png");
     frozen = minim.loadSample( "sound/frozen.mp3", 512);
     intro = loadImage("img/intro/iceIntro.png");
     startBtn = loadImage("img/button/start.png");
@@ -179,8 +180,8 @@ class IceCream extends Food {
     case INTRO :
       imageMode(CORNER);
       image(intro, 0, 0);
-      image(startBtn, 600, 650);
-      if (isHit(mouseX, mouseY, 0, 0, 600, 650, startBtn.width, startBtn.height) && mousePressed) {
+      image(startBtn, 600, 630);
+      if (isHit(mouseX, mouseY, 0, 0, 600, 630, startBtn.width, startBtn.height) && mousePressed) {
         state = PLAY;
       }
       break;  
@@ -472,29 +473,30 @@ class IceCream extends Food {
       /*----Check----*/
       int []orderCheck = {order1, order2, order3};
       int []putCheck = {putIcecream1, putIcecream2, putIcecream3};
+      image(comment, 170, 50);
       textAlign(CENTER);
       if (isRight(orderCheck, putCheck) != 1) {
-        text("Wrong", 350, 200);
+        text("Wrong", 350, 150);
         if (!soundCtrl) {
           wrong.trigger();
           soundCtrl = true;
         }
         bloodChange(bloodCtrl, -1);
-        image(againbtn, 600, 650);
-        if (isHit(mouseX, mouseY, 0, 0, 600, 650, againbtn.width, againbtn.height) && mousePressed) {
+        image(againbtn, 650, 645);
+        if (isHit(mouseX, mouseY, 0, 0, 650, 645, againbtn.width, againbtn.height) && mousePressed) {
           initIceCream();
           state = PLAY;
           soundCtrl = false;
         }
       } else {
-        text("Right", 350, 200);
+        text("Right", 350, 150);
         if (!soundCtrl) {
           complete.trigger();
           soundCtrl = true;
         }
         bloodChange(bloodCtrl, 1);
-        image(finBtn, 600, 650);
-        if (isHit(mouseX, mouseY, 0, 0, 600, 650, finBtn.width, finBtn.height) && mousePressed) {
+        image(finBtn, 600, 630);
+        if (isHit(mouseX, mouseY, 0, 0, 600, 630, finBtn.width, finBtn.height) && mousePressed) {
           foods[foodIndex].done = true;
           customers[curCustomer].order[foodIndex] = -1;
           gameState = TABLE;

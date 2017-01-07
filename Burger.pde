@@ -2,7 +2,7 @@ import java.util.*;
 class Burger extends Food {
   PImage btmbread, middlebread, topbread, 
     cheese, lettuce, meat, tomato, 
-    conveyor, conveyorGlass, plate;
+    conveyor, conveyorGlass, plate, comment;
   AudioSample fall;
   Ingredients[] igds = new Ingredients[6];
   Ingredients[] player = new Ingredients[7];
@@ -37,7 +37,7 @@ class Burger extends Food {
     finished = loadImage("img/burger/finished.png");
     clock = loadImage("img/clock.png");
     plate = loadImage("img/burger/plate.png");
-
+    comment = loadImage("img/bubble/comment.png");
     //burger
     btmbread = loadImage("img/burger/btmbread.png");
     middlebread = loadImage("img/burger/middlebread.png");
@@ -108,8 +108,8 @@ class Burger extends Food {
     case INTRO :
       imageMode(CORNER);
       image(intro, 0, 0);
-      image(startBtn, 600, 650);
-      if (isHit(mouseX, mouseY, 0, 0, 600, 650, startBtn.width, startBtn.height) && mousePressed) {
+      image(startBtn, 600, 630);
+      if (isHit(mouseX, mouseY, 0, 0, 600, 630, startBtn.width, startBtn.height) && mousePressed) {
         state = SAMPLE;
       }
       break;  
@@ -193,15 +193,16 @@ class Burger extends Food {
 
     case FINISH :
       float g = CenterOfGravity();
+      image(comment, 170, 100);
       textAlign(CENTER);
-      if (g > 10) {
-        text("ugly", 300, 200);
+      if (g > 15) {
+        text("Ugly", 350, 200);
         bloodChange(bloodCtrl, -1);
       } else if (g > 5) {
-        text("good", 300, 200);
+        text("Good", 350, 200);
         bloodChange(bloodCtrl, 1);
       } else {
-        text("perfect", 300, 200);
+        text("Perfect", 350, 200);
         bloodChange(bloodCtrl, 2);
       }
 
@@ -209,8 +210,8 @@ class Burger extends Food {
       for (int i=0; i < n; i++) {
         image(burger.get(i).img, player[i].x, player[i].y-150);
       }
-      image(finBtn, 600, 650);
-      if (isHit(mouseX, mouseY, 0, 0, 600, 650, finBtn.width, finBtn.height) && mousePressed) {
+      image(finBtn, 600, 630);
+      if (isHit(mouseX, mouseY, 0, 0, 600, 630, finBtn.width, finBtn.height) && mousePressed) {
         foods[foodIndex].done = true;
         customers[curCustomer].order[foodIndex] = -1;
         gameState = TABLE;
@@ -249,7 +250,7 @@ class Burger extends Food {
   float CenterOfGravity() {
     float sum = 0;
     for (int i = 0; i < player.length; i++) {
-      sum += (abs(player[i].x+100)-width/2);
+      sum += abs((player[i].x+100)-(width/2));
     }
     CenterOfGravity = sum/7;
     return CenterOfGravity;

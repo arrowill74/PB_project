@@ -1,6 +1,6 @@
 class FrenchFries extends Food {
   //french fries
-  PImage emptyFrenchfries, fewFrenchfries, halfFrenchfries, fullFrenchfries, bug, frenchfry, burnedFrenchfry;
+  PImage emptyFrenchfries, fewFrenchfries, halfFrenchfries, fullFrenchfries, bug, frenchfry, burnedFrenchfry, comment;
   //clock
   PImage clock;
   PFont second;
@@ -27,6 +27,7 @@ class FrenchFries extends Food {
   int clock_X, clock_Y, clock_W = 150, clock_H = 150;
 
   FrenchFries () {
+    comment = loadImage("img/bubble/comment.png");
     bugSound = minim.loadSample( "sound/bug.mp3", 512);
     intro = loadImage("img/intro/FFIntro.png");
     startBtn = loadImage("img/button/start.png");
@@ -63,7 +64,7 @@ class FrenchFries extends Food {
     clock_X = 530;
     clock_Y = 30;
     second = createFont("Arial", 24);
-    timeCount = 930;
+    timeCount = 1860;
   }
   void display() {
     image(bg, 0, 0);
@@ -71,8 +72,8 @@ class FrenchFries extends Food {
     case INTRO :
       imageMode(CORNER);
       image(intro, 0, 0);
-      image(startBtn, 600, 650);
-      if (isHit(mouseX, mouseY, 0, 0, 600, 650, startBtn.width, startBtn.height) && mousePressed) {
+      image(startBtn, 600, 630);
+      if (isHit(mouseX, mouseY, 0, 0, 600, 630, startBtn.width, startBtn.height) && mousePressed) {
         state = PLAY;
       }
       break;  
@@ -186,39 +187,43 @@ class FrenchFries extends Food {
       break;
 
     case FINISH :
+      image(comment, 170, 100);
+      textAlign(CENTER);
       if (numFrenchfries >= 15) {
-        image(fullFrenchfries, 250, 250, 200, 250);
-        image(finBtn, 600, 650);
+        text("Good Job!", 350, 200);
+        image(fullFrenchfries, 250, 300, 200, 250);
+        image(finBtn, 600, 630);
         if (!soundCtrl) {
           complete.trigger();
           soundCtrl = true;
         }
         bloodChange(bloodCtrl, 2);
-        if (isHit(mouseX, mouseY, 0, 0, 600, 650, finBtn.width, finBtn.height) && mousePressed) {
+        if (isHit(mouseX, mouseY, 0, 0, 600, 630, finBtn.width, finBtn.height) && mousePressed) {
           foods[foodIndex].done = true;
           customers[curCustomer].order[foodIndex] = -1;
           gameState = TABLE;
           soundCtrl = false;
         }
       } else {
-        image(againbtn, 600, 650);
+        text("Not Enough", 350, 200);
+        image(againbtn, 650, 645);
         if (!soundCtrl) {
           wrong.trigger();
           soundCtrl = true;
         }
         bloodChange(bloodCtrl, -1);
-        if (isHit(mouseX, mouseY, 0, 0, 600, 650, againbtn.width, againbtn.height) && mousePressed) {
+        if (isHit(mouseX, mouseY, 0, 0, 650, 645, againbtn.width, againbtn.height) && mousePressed) {
           state = PLAY;
-          timeCount = 930;
+          timeCount = 1860;
           numFrenchfries = 0;
           soundCtrl = false;
         }
         if (numFrenchfries >= 10) {
-          image(halfFrenchfries, 250, 250, 200, 250);
+          image(halfFrenchfries, 250, 300, 200, 250);
         } else if (numFrenchfries >= 5) {
-          image(fewFrenchfries, 250, 250, 200, 250);
+          image(fewFrenchfries, 250, 300, 200, 250);
         } else {
-          image(emptyFrenchfries, 250, 250, 200, 250);
+          image(emptyFrenchfries, 250, 300, 200, 250);
         }
       }
       break;
