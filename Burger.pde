@@ -91,7 +91,11 @@ class Burger extends Food {
 
   void showFinished(float x, float y) {
     imageMode(CORNER);
-    image(finished, x, y, 160, 170);
+    //image(finished, x, y, 160, 170);
+    image(plate, x, y+110, 160, 55);
+    for (int i=0; i < n; i++) {
+      image(burger.get(i).img, x+10, y+75-i*13, 140, 70);
+    }
   }
 
   boolean onClick() {
@@ -130,13 +134,14 @@ class Burger extends Food {
         timeCount = 0;
         state = PLAY;
       }
+
       break;
 
     case PLAY :
       //test sample, should be delete
-      for (int i = 0; i < burger.size(); i++) {
-        image(burger.get(i).img, 0, 580-i*20);
-      }
+      //for (int i = 0; i < burger.size(); i++) {
+      //  image(burger.get(i).img, 0, 580-i*20);
+      //}
 
       //conveyor roll
       conveyorX+=conveyorSpeed; 
@@ -216,8 +221,12 @@ class Burger extends Food {
         customers[curCustomer].order[foodIndex] = -1;
         gameState = TABLE;
       }
-
       break;
+    }
+    if (state != 0) {
+      for (int i = 0; i < blood.length; i++) {
+        blood[i].display(curblood);
+      }
     }
   }
 
@@ -233,7 +242,7 @@ class Burger extends Food {
   }
 
   void keyReleased() {
-    if ( keyCode == ' ') {
+    if ( keyCode == ' ' && state == PLAY) {
       for (int i=0; i<igds.length; i++) {
         if (igds[i].x>=150 && igds[i].x<=330) {
           fall.trigger();

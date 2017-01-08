@@ -6,7 +6,7 @@ AudioPlayer win;
 AudioSample over;
 PImage startBg, peopleBg, tableBg, table, next1, next2, angry, happy;
 PFont text;
-
+PImage againbtn;
 Person[] customers = new Person[3];
 Food[] foods = new Food[7];
 Food playing;
@@ -40,6 +40,7 @@ Blood[] blood = new Blood[10];
 int curblood;
 boolean bloodCtrl;
 boolean soundCtrl = false;
+boolean gameSoundCtrl = false;
 
 void setup () {
   size(700, 700);
@@ -48,10 +49,9 @@ void setup () {
   music = minim.loadFile("music/test.mp3", 1024);
   win = minim.loadFile("music/happy.mp3", 1024);
   over = minim.loadSample("sound/over.mp3", 1024);
-  music.play();
-  music.loop();
 
   //load background
+  againbtn = loadImage("img/button/again.png");
   startBg = loadImage("img/background/startBg.png");
   peopleBg = loadImage("img/background/peopleBg.png");
   tableBg = loadImage("img/background/moodBg.png");
@@ -60,13 +60,6 @@ void setup () {
   next2 = loadImage("img/people/teacherHalfBlack.png");
   angry = loadImage("img/bubble/angry.png");
   happy = loadImage("img/bubble/happy.png");
-
-  customers[0] = new Person("fTA");
-  customers[0].setOrder(new int[]{BURGER, DRINK, -1, -1, -1, -1, -1});
-  customers[1] = new Person("mTA");
-  customers[1].setOrder(new int[]{BURGER, DRINK, FRENCH_FRIES, -1, -1, -1, -1});
-  customers[2] = new Person("teacher");
-  customers[2].setOrder(new int[]{ICE_CREAM, FRENCH_FRIES, FRENCH_FRIES, BURGER, BURGER, DRINK, DRINK});
 
   for (int i = 0; i < blood.length; i++) {
     if (i < 3) {
@@ -86,10 +79,10 @@ void draw() {
     curblood = 10;
   } else if (curblood < 1) {
     gameState = OVER;
-    if (!soundCtrl) {
+    if (!gameSoundCtrl) {
       music.pause();
       over.trigger();
-      soundCtrl = true;
+      gameSoundCtrl = true;
     }
   }
   switch (gameState) {
@@ -100,10 +93,10 @@ void draw() {
   case TABLE:
     if (curCustomer == 2 && checkOrder()) {
       gameState = WIN;
-      if (!soundCtrl) {
+      if (!gameSoundCtrl) {
         music.pause();
         win.play();
-        soundCtrl = true;
+        gameSoundCtrl = true;
       }
     }
     //background
@@ -150,11 +143,7 @@ void draw() {
 
     case DRINK:
       playing.display();
-
       break;
-    }
-    for (int i = 0; i < blood.length; i++) {
-      blood[i].display(curblood);
     }
     break;
 
@@ -164,6 +153,10 @@ void draw() {
     customers[0].sadDisplay(40, 250);
     customers[1].sadDisplay(260, 250);
     customers[2].sadDisplay(480, 250);
+    image(againbtn, 650, 645);
+    if (isHit(mouseX, mouseY, 0, 0, 650, 645, againbtn.width, againbtn.height) && mousePressed) {
+      initGame();
+    }
     break;
 
   case WIN :
@@ -172,6 +165,11 @@ void draw() {
     customers[0].fullDisplay(40, 250);
     customers[1].fullDisplay(260, 250);
     customers[2].fullDisplay(480, 250);
+    image(againbtn, 650, 645);
+    if (isHit(mouseX, mouseY, 0, 0, 650, 645, againbtn.width, againbtn.height) && mousePressed) {
+      win.pause();
+      initGame();
+    }
     break;
   }
 }
@@ -274,5 +272,14 @@ boolean checkOrder() {
 void initGame() {
   gameState = START;
   curblood = 5;
-  curCustomer = 0;
+  curCustomer = 2;
+  gameSoundCtrl = false;
+  music.play();
+  music.loop();
+  customers[0] = new Person("fTA");
+  customers[0].setOrder(new int[]{BURGER, DRINK, -1, -1, -1, -1, -1});
+  customers[1] = new Person("mTA");
+  customers[1].setOrder(new int[]{BURGER, DRINK, FRENCH_FRIES, -1, -1, -1, -1});
+  customers[2] = new Person("teacher");
+  customers[2].setOrder(new int[]{ICE_CREAM, FRENCH_FRIES, FRENCH_FRIES, BURGER, BURGER, DRINK, DRINK});
 }

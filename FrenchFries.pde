@@ -64,7 +64,7 @@ class FrenchFries extends Food {
     clock_X = 530;
     clock_Y = 30;
     second = createFont("Arial", 24);
-    timeCount = 1860;
+    timeCount = 1200;
   }
   void display() {
     image(bg, 0, 0);
@@ -203,6 +203,7 @@ class FrenchFries extends Food {
           customers[curCustomer].order[foodIndex] = -1;
           gameState = TABLE;
           soundCtrl = false;
+          bloodCtrl = false;
         }
       } else {
         text("Not Enough", 350, 200);
@@ -214,9 +215,10 @@ class FrenchFries extends Food {
         bloodChange(bloodCtrl, -1);
         if (isHit(mouseX, mouseY, 0, 0, 650, 645, againbtn.width, againbtn.height) && mousePressed) {
           state = PLAY;
-          timeCount = 1860;
+          timeCount = 1200;
           numFrenchfries = 0;
           soundCtrl = false;
+          bloodCtrl = false;
         }
         if (numFrenchfries >= 10) {
           image(halfFrenchfries, 250, 300, 200, 250);
@@ -227,6 +229,11 @@ class FrenchFries extends Food {
         }
       }
       break;
+    }
+    if (state != 0) {
+      for (int i = 0; i < blood.length; i++) {
+        blood[i].display(curblood);
+      }
     }
   }
   void showFinished(float x, float y) {

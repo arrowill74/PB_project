@@ -89,7 +89,7 @@ class Person {
       tableY[2] = 325;
       tableX[3] = 25;
       tableY[3] = 500;
-      tableX[4] = 225;
+      tableX[4] = 200;
       tableY[4] = 500;
       tableX[5] = 400;
       tableY[5] = 500;

@@ -135,12 +135,14 @@ class Drink extends Food {
           customers[curCustomer].order[foodIndex] = -1;
           gameState = TABLE;
           soundCtrl = false;
+          bloodCtrl = false;
           mouseReleased= false;
         }
       } else {
         image(againbtn, 650, 645);
         if (isHit(mouseX, mouseY, 0, 0, 650, 645, againbtn.width, againbtn.height) && mousePressed) {
           soundCtrl = false;
+          bloodCtrl = false;
           drinkHeight = height-35;
           state = PLAY;
           mouseReleased= false;
@@ -148,12 +150,20 @@ class Drink extends Food {
       }
       break;
     }
+    if (state != 0) {
+      for (int i = 0; i < blood.length; i++) {
+        blood[i].display(curblood);
+      }
+    }
   }
 
   boolean judge() {
     if (type == pourType) {
       if (drinkHeight>=height*3/4-25-2 && drinkHeight<=height*3/4-15+2) {
         image(right, 160, 200);
+        if (!bloodCtrl) {
+          bloodChange(bloodCtrl, 1);
+        }
         if (!soundCtrl) {
           complete.trigger();
           soundCtrl = true;
@@ -161,6 +171,9 @@ class Drink extends Food {
         return true;
       } else {
         image(invalid, 160, 200);
+        if (!bloodCtrl) {
+          bloodChange(bloodCtrl, -1);
+        }
         if (!soundCtrl) {
           wrong.trigger();
           soundCtrl = true;
@@ -169,6 +182,9 @@ class Drink extends Food {
       }
     } else {
       image(wrongDrink, 160, 200);
+      if (!bloodCtrl) {
+        bloodChange(bloodCtrl, -2);
+      }
       if (!soundCtrl) {
         wrong.trigger();
         soundCtrl = true;
@@ -196,21 +212,18 @@ class Drink extends Food {
         mouseReleased = true;
         juicePour = false;
         pourType = 0;
-        moodChange();
         initDrink();
         state = FINISH;
       } else if (mouseX>drinkMachineUp.width/2+15 && mouseX<drinkMachineUp.width/2+45 && mouseY>drinkMachineUp.height*0.7-25 && mouseY<drinkMachineUp.height*0.76-25) {//coke button
         mouseReleased = true;
         cokePour = false;
         pourType = 1;
-        moodChange();
         initDrink();
         state = FINISH;
       } else if (mouseX> drinkMachineUp.width*3/4 && mouseX< drinkMachineUp.width*3/4+30 && mouseY>drinkMachineUp.height*0.7-25 && mouseY<drinkMachineUp.height*0.76-25) {//beer button
         mouseReleased = true;
         beerPour = false;
         pourType = 2;
-        moodChange();
         initDrink();
         state = FINISH;
       }
@@ -234,13 +247,5 @@ class Drink extends Food {
     drinkHeight = height-35+pourSpeed; //glass bottom:height-35
     pourSpeed--;
     quad(drinkMachineDown.width/2, drinkHeight, drinkMachineDown.width/2+glass.width-40, drinkHeight, drinkMachineDown.width/2+glass.width-40, height-35, drinkMachineDown.width/2, height-35);//glass width:drinkMachineDown.width/2~drinkMachineDown.width/2+glass.width-40
-  }
-
-  void moodChange() {
-    if (drinkHeight>=height*3/4-35-2 && drinkHeight<=height*3/4-50+2) {//effective range
-      curblood++;
-    } else {
-      curblood--;
-    }
   }
 }

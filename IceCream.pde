@@ -311,7 +311,7 @@ class IceCream extends Food {
         text("0"+timeCount/60, 575, 140) ;
       }
       if (timeCount <= 0) {
-        timeCount = 0;
+        state = FINISH;
       }    
 
       /*----UpIcecream----*/
@@ -487,6 +487,7 @@ class IceCream extends Food {
           initIceCream();
           state = PLAY;
           soundCtrl = false;
+          bloodCtrl = false;
         }
       } else {
         text("Right", 350, 150);
@@ -501,16 +502,26 @@ class IceCream extends Food {
           customers[curCustomer].order[foodIndex] = -1;
           gameState = TABLE;
           soundCtrl = false;
+          bloodCtrl = false;
         }
       }
       break;
+    }
+    if (state != 0) {
+      for (int i = 0; i < blood.length; i++) {
+        blood[i].display(curblood);
+      }
     }
   }
 
 
   void showFinished(float x, float y) {
     imageMode(CORNER);
-    image(finished, x, y, 50, 150);
+    //image(finished, x, y, 50, 150);
+    image(cone, x, y+90, 50, 80);
+    image(putlist[putIcecream1], x, y+60, 50, 50);
+    image(putlist[putIcecream2], x, y+30, 50, 50);      
+    image(putlist[putIcecream3], x, y, 50, 50);
   }
   void showGray(float x, float y) {
     imageMode(CORNER);
