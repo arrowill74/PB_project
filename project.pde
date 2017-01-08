@@ -153,8 +153,9 @@ void draw() {
     customers[0].sadDisplay(40, 250);
     customers[1].sadDisplay(260, 250);
     customers[2].sadDisplay(480, 250);
-    image(againbtn, 650, 645);
-    if (isHit(mouseX, mouseY, 0, 0, 650, 645, againbtn.width, againbtn.height) && mousePressed) {
+    image(againbtn, 0, 645);
+    if (isHit(mouseX, mouseY, 0, 0, 0, 645, againbtn.width, againbtn.height) && mousePressed) {
+      win.pause();
       initGame();
     }
     break;
@@ -165,8 +166,8 @@ void draw() {
     customers[0].fullDisplay(40, 250);
     customers[1].fullDisplay(260, 250);
     customers[2].fullDisplay(480, 250);
-    image(againbtn, 650, 645);
-    if (isHit(mouseX, mouseY, 0, 0, 650, 645, againbtn.width, againbtn.height) && mousePressed) {
+    image(againbtn, 0, 645);
+    if (isHit(mouseX, mouseY, 0, 0, 0, 645, againbtn.width, againbtn.height) && mousePressed) {
       win.pause();
       initGame();
     }
@@ -272,7 +273,7 @@ boolean checkOrder() {
 void initGame() {
   gameState = START;
   curblood = 5;
-  curCustomer = 2;
+  curCustomer = 0;
   gameSoundCtrl = false;
   music.play();
   music.loop();
