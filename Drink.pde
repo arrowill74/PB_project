@@ -45,6 +45,7 @@ class Drink extends Food {
   }
   void showFinished(float x, float y) {
     imageMode(CORNER);
+    noStroke();
     if (curCustomer == 0) {
       fill(253, 184, 27);
     } else if (curCustomer == 1) {
@@ -74,6 +75,11 @@ class Drink extends Food {
       image(startBtn, 600, 630);
       if (isHit(mouseX, mouseY, 0, 0, 600, 630, startBtn.width, startBtn.height) && mousePressed) {
         state = PLAY;
+      }
+      if (isHit(0, 0, 50, 50, mouseX, mouseY, 0, 0) && mousePressed) {
+        foods[foodIndex].done = true;
+        customers[curCustomer].order[foodIndex] = -1;
+        gameState = TABLE;
       }
       break;  
 
@@ -123,6 +129,7 @@ class Drink extends Food {
       line(width/5+5, height*3/4-15, width/5+5+20, height*3/4-15);
       image(glass, drinkMachineDown.width/2-20, 475);
       image(drinkMachineUp, (width-drinkMachineUp.width)/2, 125);
+      
       break;
 
     case FINISH :

@@ -93,7 +93,7 @@ class Burger extends Food {
     imageMode(CORNER);
     //image(finished, x, y, 160, 170);
     image(plate, x, y+110, 160, 55);
-    for (int i=0; i < n; i++) {
+    for (int i=0; i < burger.size(); i++) {
       image(burger.get(i).img, x+10, y+75-i*13, 140, 70);
     }
   }
@@ -115,6 +115,11 @@ class Burger extends Food {
       image(startBtn, 600, 630);
       if (isHit(mouseX, mouseY, 0, 0, 600, 630, startBtn.width, startBtn.height) && mousePressed) {
         state = SAMPLE;
+      }
+      if (isHit(0, 0, 50, 50, mouseX, mouseY, 0, 0) && mousePressed) {
+        foods[foodIndex].done = true;
+        customers[curCustomer].order[foodIndex] = -1;
+        gameState = TABLE;
       }
       break;  
     case SAMPLE :
@@ -194,6 +199,7 @@ class Burger extends Food {
         state = FINISH;
         complete.trigger();
       }
+      
       break;
 
     case FINISH :

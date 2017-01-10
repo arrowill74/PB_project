@@ -184,6 +184,11 @@ class IceCream extends Food {
       if (isHit(mouseX, mouseY, 0, 0, 600, 630, startBtn.width, startBtn.height) && mousePressed) {
         state = PLAY;
       }
+      if (isHit(0, 0, 50, 50, mouseX, mouseY, 0, 0) && mousePressed) {
+        foods[foodIndex].done = true;
+        customers[curCustomer].order[foodIndex] = -1;
+        gameState = TABLE;
+      }
       break;  
 
 
@@ -460,7 +465,6 @@ class IceCream extends Food {
       image(frost, matcha_X, matcha_Y, box_W, box_H);
       noTint();
 
-
       break;
 
     case FINISH :
@@ -519,9 +523,9 @@ class IceCream extends Food {
     imageMode(CORNER);
     //image(finished, x, y, 50, 150);
     image(cone, x, y+90, 50, 80);
-    image(putlist[putIcecream1], x, y+60, 50, 50);
-    image(putlist[putIcecream2], x, y+30, 50, 50);      
-    image(putlist[putIcecream3], x, y, 50, 50);
+    image(putlist[order1], x, y+60, 50, 50);
+    image(putlist[order2], x, y+30, 50, 50);      
+    image(putlist[order3], x, y, 50, 50);
   }
   void showGray(float x, float y) {
     imageMode(CORNER);

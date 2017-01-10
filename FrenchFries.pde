@@ -76,6 +76,11 @@ class FrenchFries extends Food {
       if (isHit(mouseX, mouseY, 0, 0, 600, 630, startBtn.width, startBtn.height) && mousePressed) {
         state = PLAY;
       }
+      if (isHit(0, 0, 50, 50, mouseX, mouseY, 0, 0) && mousePressed) {
+        foods[foodIndex].done = true;
+        customers[curCustomer].order[foodIndex] = -1;
+        gameState = TABLE;
+      }
       break;  
 
 
@@ -184,6 +189,7 @@ class FrenchFries extends Food {
         foods[foodIndex].done = true;
         state = FINISH;
       }
+      
       break;
 
     case FINISH :
